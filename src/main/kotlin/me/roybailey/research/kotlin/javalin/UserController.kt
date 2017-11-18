@@ -13,18 +13,29 @@ object UserController {
         ctx.json(userDao.users)
     }
 
+    data class UserTemplate(
+            val id: String? = null,
+            val name: String? = null,
+            val email: String? = null
+    )
+
     fun createUser(ctx: Context) {
-        val newUser = ctx.bodyAsClass(User::class.java)
-        userDao.save(newUser.name, newUser.email)
+        val newUser = ctx.bodyAsClass(UserTemplate::class.java)
+        userDao.save(newUser.name!!, newUser.email!!)
     }
 
     fun getUser(ctx: Context) {
-        ctx.json(userDao.getUser(ctx.param(":user-id")!!))
+        ctx.json(userDao.findById(ctx.param(":user-id")!!)!!)
     }
 
     fun updateUser(ctx: Context) {
-        val updatedUser = ctx.bodyAsClass(User::class.java)
-        userDao.save(updatedUser)
+        val updatedUserTemplate = ctx.bodyAsClass(UserTemplate::class.java)
+        val updatedUser = User(
+                id = updatedUserTemplate.id!!,
+                name = updatedUserTemplate.name!!,
+                email = updatedUserTemplate.email!!
+        )
+        userDao.update(updatedUser.id, updatedUser)
     }
 
     fun deleteUser(ctx: Context) {
