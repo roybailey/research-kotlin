@@ -17,3 +17,5 @@ build/
 target/
 node_modules/
 *.iml
+neo4j
+
