@@ -89,14 +89,17 @@ object Neo4jService {
         return cypher
     }
 
-
     fun runCypher(cypher: String) : Result {
+        return runCypher(null, cypher)
+    }
+
+    fun runCypher(visitor : Result.ResultVisitor<Exception>?, cypher: String) : Result {
         var result : Result = EmptyResult()
         graphDb.beginTx().use { tx ->
-            result = graphDb.execute(cypher)
-            result.accept<Exception>({ row ->
-                println(row); true
-            })
+            //result = graphDb.execute(cypher)
+            val srs = graphDb.execute(cypher)
+            while(visitor != null && srs.hasNext())
+                println(srs.next())
             tx.success()
         }
         return result

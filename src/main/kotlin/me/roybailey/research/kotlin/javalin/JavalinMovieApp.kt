@@ -30,8 +30,8 @@ fun main(args: Array<String>) {
 
 fun getMovies(ctx: Context) {
     var result = Neo4jService.runCypher("match (m:Movie) return m.title as title")
-    result.accept<Exception>({ row ->
-        println(row); true
-    })
+    //result.accept<Exception>({ row ->
+    //    println(row); true
+    //})
     ctx.json(result)
 }
