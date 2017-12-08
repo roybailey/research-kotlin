@@ -23,7 +23,7 @@ import java.lang.Exception
 
 object Neo4jService {
 
-    var neo4jDatabaseFolder = File("/Users/roybailey/Coding/github/research-kotlin/neo4j")
+    var neo4jDatabaseFolder = File("./target/neo4j").absoluteFile
     var neo4jConfiguration = Neo4jService::class.java.getResource("/neo4j.conf")
 
     lateinit var graphDb: GraphDatabaseService
@@ -96,10 +96,7 @@ object Neo4jService {
     fun runCypher(visitor : Result.ResultVisitor<Exception>?, cypher: String) : Result {
         var result : Result = EmptyResult()
         graphDb.beginTx().use { tx ->
-            //result = graphDb.execute(cypher)
-            val srs = graphDb.execute(cypher)
-            while(visitor != null && srs.hasNext())
-                println(srs.next())
+            result = graphDb.execute(cypher)
             tx.success()
         }
         return result
