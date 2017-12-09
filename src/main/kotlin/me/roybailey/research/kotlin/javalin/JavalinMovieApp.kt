@@ -1,10 +1,10 @@
 package me.roybailey.research.kotlin.javalin
 
-import io.javalin.ApiBuilder.*
+import io.javalin.ApiBuilder.get
+import io.javalin.ApiBuilder.path
 import io.javalin.Context
 import io.javalin.Javalin
 import me.roybailey.research.kotlin.neo4j.Neo4jService
-import org.neo4j.graphdb.Result
 
 
 fun main(args: Array<String>) {
@@ -29,9 +29,21 @@ fun main(args: Array<String>) {
 }
 
 fun getMovies(ctx: Context) {
-    var result = Neo4jService.runCypher("match (m:Movie) return m.title as title")
-    //result.accept<Exception>({ row ->
-    //    println(row); true
-    //})
-    ctx.json(result)
+    // first run the query and capture the results...
+    val results = mutableListOf<MutableMap<String, Any>>()
+    val captureResults = fun(row: Int, name: String, value: Any) {
+        printResults(results, row, name, value)
+    }
+    Neo4jService.runCypher(captureResults, "match (m:Movie) return m")
+    // second return an appropriate representation of the data based on requested format...
+    ctx.json(results)
+}
+
+fun printResults(capture: MutableList<MutableMap<String, Any>>, row: Int, name: String, value: Any) {
+    if (capture.size == row) {
+        if (row > 0) println()
+        capture.add(mutableMapOf())
+    }
+    print("( name=$name value=$value )")
+    capture.last().put(name, value)
 }

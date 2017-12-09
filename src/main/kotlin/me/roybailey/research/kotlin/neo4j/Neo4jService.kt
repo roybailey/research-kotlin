@@ -10,34 +10,51 @@ import apoc.load.Xml
 import apoc.meta.Meta
 import apoc.path.PathExplorer
 import apoc.refactor.GraphRefactoring
-import org.neo4j.graphdb.*
+import mu.KotlinLogging
+import org.neo4j.graphdb.GraphDatabaseService
+import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.configuration.BoltConnector
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
 import java.io.File
-import java.io.PrintWriter
-import java.lang.Exception
+import java.util.*
+
+
 
 
 object Neo4jService {
 
-    var neo4jDatabaseFolder = File("./target/neo4j").absoluteFile
-    var neo4jConfiguration = Neo4jService::class.java.getResource("/neo4j.conf")
+    private val log = KotlinLogging.logger {}
+
+    val neo4jDatabaseFolder = File("./target/neo4j").absoluteFile
+    val neo4jConfiguration = Neo4jService::class.java.getResource("/neo4j.conf")
+    val neo4jProperties = Properties()
 
     lateinit var graphDb: GraphDatabaseService
 
     fun init() {
-        val bolt = BoltConnector("0")
 
-        graphDb = GraphDatabaseFactory()
+        log.info("Creating Neo4j Embedded Database into: "+ neo4jDatabaseFolder)
+
+        val graphDbBuilder = GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(neo4jDatabaseFolder)
                 .loadPropertiesFromURL(neo4jConfiguration)
-                .setConfig( bolt.type, "BOLT" )
-                .setConfig( bolt.enabled, "true" )
-                .setConfig( bolt.listen_address, "localhost:7887" )
-                .newGraphDatabase()
+
+        neo4jProperties.load(neo4jConfiguration.openStream())
+
+        val boltConnectorPort = neo4jProperties.getProperty("neo4j.bolt.connector.port", "")
+        if(!boltConnectorPort.isEmpty()) {
+            val bolt = BoltConnector("0")
+            graphDbBuilder.setConfig(bolt.type, "BOLT")
+                    .setConfig(bolt.enabled, "true")
+                    .setConfig(bolt.listen_address, "localhost:"+boltConnectorPort)
+            log.info("Creating Bolt Connector on Port: "+boltConnectorPort)
+        }
+
+        graphDb = graphDbBuilder.newGraphDatabase()
+        log.info("Created Neo4j Embedded Database from: "+ neo4jConfiguration)
 
         registerProcedures(listOf(
                 Help::class.java,
@@ -54,6 +71,7 @@ object Neo4jService {
                 Meta::class.java,
                 GraphRefactoring::class.java
         ))
+        log.info("Registered Neo4j Apoc Procedures")
 
         // Registers a shutdown hook for the Neo4j instance so that it
         // shuts down nicely when the VM exits (even if you "Ctrl-C" the
@@ -89,71 +107,34 @@ object Neo4jService {
         return cypher
     }
 
-    fun runCypher(cypher: String) : Result {
-        return runCypher(null, cypher)
+
+    private fun defaultVisitor(row:Int, name: String, value: Any) {}
+
+    fun runCypher(cypher: String) {
+        runCypher(this::defaultVisitor, cypher)
     }
 
-    fun runCypher(visitor : Result.ResultVisitor<Exception>?, cypher: String) : Result {
-        var result : Result = EmptyResult()
-        graphDb.beginTx().use { tx ->
-            result = graphDb.execute(cypher)
+    fun runCypher(visitor: (Int, String, Any) -> Unit, cypher: String) {
+        Neo4jService.graphDb.beginTx().use { tx ->
+            //result = graphDb.execute(cypher)
+            val srs = Neo4jService.graphDb.execute(cypher)
+            var row = 0
+            while (srs.hasNext()) {
+                val record = srs.next()
+                srs.columns().forEach { name: String ->
+                    val value = record.getValue(name)
+                    if (value is Node) {
+                        value.allProperties.forEach { prop ->
+                            visitor(row, name + "." + prop.key, prop.value)
+                        }
+                    } else {
+                        visitor(row, name, value)
+                    }
+                }
+                ++row
+            }
             tx.success()
         }
-        return result
-    }
-
-}
-
-class EmptyResult : Result {
-    override fun remove() {
-    }
-
-    override fun getQueryExecutionType(): QueryExecutionType {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun writeAsStringTo(p0: PrintWriter?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T : Any?> columnAs(p0: String?): ResourceIterator<T> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun next(): MutableMap<String, Any> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun columns(): MutableList<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <VisitationException : Exception?> accept(p0: Result.ResultVisitor<VisitationException>?) {
-        return
-    }
-
-    override fun getExecutionPlanDescription(): ExecutionPlanDescription {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun resultAsString(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun hasNext(): Boolean {
-        return false
-    }
-
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getQueryStatistics(): QueryStatistics {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getNotifications(): MutableIterable<Notification> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
