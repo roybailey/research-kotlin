@@ -28,8 +28,8 @@ class Neo4jServiceTest {
         }
     }
 
+    fun printResults(ctx: QueryResultContext, name: String, value: Any?) {
+        print(" (name=$name value=$value)")
+    }
 }
 
-fun printResults(row: Int, name: String, value: Any) {
-    print(" (name=$name value=$value)")
-}

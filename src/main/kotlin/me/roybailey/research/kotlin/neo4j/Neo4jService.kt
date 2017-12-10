@@ -18,11 +18,23 @@ import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.configuration.BoltConnector
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
+import org.neo4j.procedure.Name
 import java.io.File
 import java.util.*
+import org.neo4j.procedure.UserFunction
 
 
 
+data class QueryResultContext(val row:Int, val column:Int)
+
+class Neo4jServiceProcedures {
+
+    @UserFunction("custom.data.encrypt")
+    fun format(@Name("value") value: String,
+               @Name(value = "key", defaultValue = "") key: String): String {
+        return String(Base64.getEncoder().encode(value.toByteArray()))
+    }
+}
 
 object Neo4jService {
 
@@ -60,6 +72,8 @@ object Neo4jService {
                 Help::class.java,
                 Coll::class.java,
                 apoc.map.Maps::class.java,
+                apoc.load.Jdbc::class.java,
+                apoc.text.Strings::class.java,
                 Json::class.java,
                 Create::class.java,
                 apoc.date.Date::class.java,
@@ -69,7 +83,8 @@ object Neo4jService {
                 Xml::class.java,
                 PathExplorer::class.java,
                 Meta::class.java,
-                GraphRefactoring::class.java
+                GraphRefactoring::class.java,
+                Neo4jServiceProcedures::class.java
         ))
         log.info("Registered Neo4j Apoc Procedures")
 
@@ -94,6 +109,7 @@ object Neo4jService {
             toRegister.forEach { proc ->
                 try {
                     procedures.registerProcedure(proc)
+                    procedures.registerFunction(proc)
                 } catch (e: KernelException) {
                     throw RuntimeException("Error registering " + proc, e)
                 }
@@ -108,28 +124,32 @@ object Neo4jService {
     }
 
 
-    private fun defaultVisitor(row:Int, name: String, value: Any) {}
+    private fun defaultVisitor(result: QueryResultContext, name: String, value: Any?) {}
 
     fun runCypher(cypher: String) {
         runCypher(this::defaultVisitor, cypher)
     }
 
-    fun runCypher(visitor: (Int, String, Any) -> Unit, cypher: String) {
+    fun runCypher(visitor: (QueryResultContext, String, Any?) -> Unit, cypher: String) {
         Neo4jService.graphDb.beginTx().use { tx ->
             //result = graphDb.execute(cypher)
             val srs = Neo4jService.graphDb.execute(cypher)
             var row = 0
             while (srs.hasNext()) {
                 val record = srs.next()
+                var col = 0;
                 srs.columns().forEach { name: String ->
                     val value = record.getValue(name)
                     if (value is Node) {
                         value.allProperties.forEach { prop ->
-                            visitor(row, name + "." + prop.key, prop.value)
+                            visitor(QueryResultContext(row,col), name + "." + prop.key, prop.value)
                         }
                     } else {
-                        visitor(row, name, value)
+                        if(value == null)
+                            log.info { "$value is null" }
+                        visitor(QueryResultContext(row,col), name, value)
                     }
+                    ++col;
                 }
                 ++row
             }
