@@ -10,36 +10,36 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <kotlin.version>1.1.60</kotlin.version>
-        <log4j.version>1.2.17</log4j.version>
+        <kotlin.version>1.2.0</kotlin.version>
+        <kotlin-logging.version>1.4.7</kotlin-logging.version>
         <slf4j.version>1.7.2</slf4j.version>
-        <jackson.version>2.3.0</jackson.version>
-        <javalin.version>1.0.1</javalin.version>
+        <jackson.version>2.9.0</jackson.version>
+        <sparkjava.version>2.7.1</sparkjava.version>
+        <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
         <neo4j.version>3.3.1</neo4j.version>
         <neo4j.apoc.version>3.3.0.1</neo4j.apoc.version>
+        <h2.version>1.4.196</h2.version>
         <junit.version>4.12</junit.version>
         <mockk.version>1.4.2</mockk.version>
     </properties>
 
     <dependencies>
 
+        <!-- Logging -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-            <scope>compile</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging</artifactId>
+            <version>${kotlin-logging.version}</version>
         </dependency>
 
         <dependency>
@@ -54,12 +54,23 @@
             <version>${jackson.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
         <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>${javalin.version}</version>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>${sparkjava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-kotlin</artifactId>
+            <version>${spark-kotlin.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-bolt</artifactId>
@@ -69,6 +80,12 @@
             <groupId>org.neo4j.procedure</groupId>
             <artifactId>apoc</artifactId>
             <version>${neo4j.apoc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
 
         <dependency>
@@ -82,7 +99,6 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
