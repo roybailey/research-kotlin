@@ -6,6 +6,7 @@ import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.*
 import org.junit.rules.TestName
+import me.roybailey.research.kotlin.neo4j.Neo4jService
 
 
 class Neo4jServiceTest {
