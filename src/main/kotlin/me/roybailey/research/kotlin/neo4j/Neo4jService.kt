@@ -10,6 +10,9 @@ import apoc.load.Xml
 import apoc.meta.Meta
 import apoc.path.PathExplorer
 import apoc.refactor.GraphRefactoring
+import me.roybailey.research.kotlin.report.ReportContext
+import me.roybailey.research.kotlin.report.ReportEvent
+import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Node
@@ -24,9 +27,6 @@ import java.util.*
 import org.neo4j.procedure.UserFunction
 
 
-
-data class QueryResultContext(val row:Int, val column:Int)
-
 class Neo4jServiceProcedures {
 
     @UserFunction("custom.data.encrypt")
@@ -35,6 +35,7 @@ class Neo4jServiceProcedures {
         return String(Base64.getEncoder().encode(value.toByteArray()))
     }
 }
+
 
 object Neo4jService {
 
@@ -48,7 +49,7 @@ object Neo4jService {
 
     fun init() {
 
-        log.info("Creating Neo4j Embedded Database into: "+ neo4jDatabaseFolder)
+        log.info("Creating Neo4j Embedded Database into: " + neo4jDatabaseFolder)
 
         val graphDbBuilder = GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(neo4jDatabaseFolder)
@@ -57,16 +58,16 @@ object Neo4jService {
         neo4jProperties.load(neo4jConfiguration.openStream())
 
         val boltConnectorPort = neo4jProperties.getProperty("neo4j.bolt.connector.port", "")
-        if(!boltConnectorPort.isEmpty()) {
+        if (!boltConnectorPort.isEmpty()) {
             val bolt = BoltConnector("0")
             graphDbBuilder.setConfig(bolt.type, "BOLT")
                     .setConfig(bolt.enabled, "true")
-                    .setConfig(bolt.listen_address, "localhost:"+boltConnectorPort)
-            log.info("Creating Bolt Connector on Port: "+boltConnectorPort)
+                    .setConfig(bolt.listen_address, "localhost:" + boltConnectorPort)
+            log.info("Creating Bolt Connector on Port: " + boltConnectorPort)
         }
 
         graphDb = graphDbBuilder.newGraphDatabase()
-        log.info("Created Neo4j Embedded Database from: "+ neo4jConfiguration)
+        log.info("Created Neo4j Embedded Database from: " + neo4jConfiguration)
 
         registerProcedures(listOf(
                 Help::class.java,
@@ -124,35 +125,43 @@ object Neo4jService {
     }
 
 
-    private fun defaultVisitor(result: QueryResultContext, name: String, value: Any?) {}
-
     fun runCypher(cypher: String) {
-        runCypher(this::defaultVisitor, cypher)
+        runCypher("UnknownReport", cypher)
     }
 
-    fun runCypher(visitor: (QueryResultContext, String, Any?) -> Unit, cypher: String) {
+    fun runCypher(reportName: String, cypher: String) {
+        val visitor = SimpleReportVisitor(reportName)
+        runCypher(visitor::reportVisit, cypher)
+    }
+
+    fun runCypher(visitor: (ctx: ReportContext) -> Unit, cypher: String) {
         Neo4jService.graphDb.beginTx().use { tx ->
             //result = graphDb.execute(cypher)
+            visitor(ReportContext(ReportEvent.START_REPORT))
             val srs = Neo4jService.graphDb.execute(cypher)
             var row = 0
             while (srs.hasNext()) {
+                visitor(ReportContext(ReportEvent.START_ROW, row = row))
                 val record = srs.next()
-                var col = 0;
-                srs.columns().forEach { name: String ->
+                var rcol = 0
+                srs.columns().forEachIndexed { col, name ->
                     val value = record.getValue(name)
                     if (value is Node) {
                         value.allProperties.forEach { prop ->
-                            visitor(QueryResultContext(row,col), name + "." + prop.key, prop.value)
+                            visitor(ReportContext(ReportEvent.DATA, name + "." + prop.key, prop.value, row, rcol++))
+                        }
+                    } else if (value is Map<*,*>) {
+                        value.keys.forEach { prop ->
+                            visitor(ReportContext(ReportEvent.DATA, name + "." + prop, value[prop], row, rcol++))
                         }
                     } else {
-                        if(value == null)
-                            log.info { "$value is null" }
-                        visitor(QueryResultContext(row,col), name, value)
+                        visitor(ReportContext(ReportEvent.DATA, name, value, row, rcol++))
                     }
-                    ++col;
                 }
+                visitor(ReportContext(ReportEvent.END_ROW, row = row))
                 ++row
             }
+            visitor(ReportContext(ReportEvent.END_REPORT, row = row))
             tx.success()
         }
     }

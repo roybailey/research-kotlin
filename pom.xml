@@ -19,8 +19,10 @@
         <neo4j.version>3.3.1</neo4j.version>
         <neo4j.apoc.version>3.3.0.1</neo4j.apoc.version>
         <h2.version>1.4.196</h2.version>
+        <super-csv.version>2.4.0</super-csv.version>
         <junit.version>4.12</junit.version>
         <mockk.version>1.4.2</mockk.version>
+        <assertj.version>3.8.0</assertj.version>
     </properties>
 
     <dependencies>
@@ -89,8 +91,19 @@
         </dependency>
 
         <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>${super-csv.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jre8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
@@ -109,6 +122,12 @@
             <groupId>io.mockk</groupId>
             <artifactId>mockk</artifactId>
             <version>${mockk.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -143,6 +162,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -167,6 +187,7 @@
                     <target>${jdk.version}</target>
                 </configuration>
             </plugin>
+            -->
         </plugins>
     </build>
 

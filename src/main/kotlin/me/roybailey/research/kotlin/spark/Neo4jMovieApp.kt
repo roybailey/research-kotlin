@@ -1,7 +1,10 @@
 package me.roybailey.research.kotlin.spark
 
 import me.roybailey.research.kotlin.neo4j.Neo4jService
-import me.roybailey.research.kotlin.neo4j.QueryResultContext
+import me.roybailey.research.kotlin.report.CsvReportVisitor
+import me.roybailey.research.kotlin.report.ReportContext
+import me.roybailey.research.kotlin.report.ReportEvent
+import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.codehaus.jackson.map.ObjectMapper
 import spark.Request
@@ -19,6 +22,7 @@ class Neo4jMovieApp {
 
     val mapper = ObjectMapper()
 
+    
     fun run() {
         with(Neo4jService) {
             init()
@@ -42,31 +46,17 @@ class Neo4jMovieApp {
         }
     }
 
-    fun getMovies(req: Request, rsp: Response): String? {
-        // first run the query and capture the results...
-        val results = mutableListOf<MutableMap<String, Any>>()
-        val captureResults = fun(ctx: QueryResultContext, name: String, value: Any?) {
-            printResults(results, ctx, name, value)
-        }
-        Neo4jService.runCypher(captureResults, "match (m:Movie) return m")
-        // second return an appropriate representation of the data based on requested format...
-        return if(req.headers("Accept").startsWith("text")) {
-            var csv = results[0].keys.joinToString(",")
-            results.forEach { record ->
-                csv += "\n"
-                csv += record.values.joinToString(",")
-            }
-            return csv
-        }
-        else mapper.writeValueAsString(results)
-    }
 
-    fun printResults(capture: MutableList<MutableMap<String, Any>>, ctx: QueryResultContext, name: String, value: Any?) {
-        if (capture.size == ctx.row) {
-            if (ctx.row > 0) println()
-            capture.add(mutableMapOf())
+    fun getMovies(req: Request, rsp: Response): String? = when {
+        (req.headers("Accept").startsWith("text")) -> {
+            val results = CsvReportVisitor("Unknown")
+            Neo4jService.runCypher(results::reportVisit, "match (m:Movie) return m")
+            mapper.writeValueAsString(results.toString())
         }
-        print("( name=$name value=$value )")
-        capture.last().put(name, value!!)
+        else -> {
+            val results = SimpleReportVisitor("Unknown")
+            Neo4jService.runCypher(results::reportVisit, "match (m:Movie) return m")
+            mapper.writeValueAsString(results.data)
+        }
     }
 }
