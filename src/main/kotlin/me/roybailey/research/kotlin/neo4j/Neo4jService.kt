@@ -16,24 +16,24 @@ import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Node
+import org.neo4j.graphdb.Result
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.configuration.BoltConnector
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
 import org.neo4j.procedure.Name
+import org.neo4j.procedure.UserFunction
 import java.io.File
 import java.util.*
-import org.neo4j.procedure.UserFunction
 
 
 class Neo4jServiceProcedures {
 
     @UserFunction("custom.data.encrypt")
     fun format(@Name("value") value: String,
-               @Name(value = "key", defaultValue = "") key: String): String {
-        return String(Base64.getEncoder().encode(value.toByteArray()))
-    }
+               @Name(value = "key", defaultValue = "") key: String): String =
+            String(Base64.getEncoder().encode(value.toByteArray()))
 }
 
 
@@ -47,6 +47,7 @@ object Neo4jService {
 
     lateinit var graphDb: GraphDatabaseService
 
+
     fun init() {
 
         log.info("Creating Neo4j Embedded Database into: " + neo4jDatabaseFolder)
@@ -58,6 +59,7 @@ object Neo4jService {
         neo4jProperties.load(neo4jConfiguration.openStream())
 
         val boltConnectorPort = neo4jProperties.getProperty("neo4j.bolt.connector.port", "")
+
         if (!boltConnectorPort.isEmpty()) {
             val bolt = BoltConnector("0")
             graphDbBuilder.setConfig(bolt.type, "BOLT")
@@ -99,9 +101,8 @@ object Neo4jService {
         })
     }
 
-    fun isEmbedded(): Boolean {
-        return true
-    }
+
+    fun isEmbedded(): Boolean = true
 
 
     fun registerProcedures(toRegister: List<Class<*>>) {
@@ -125,20 +126,26 @@ object Neo4jService {
     }
 
 
-    fun runCypher(cypher: String) {
-        runCypher("UnknownReport", cypher)
+    fun execute(cypher: String, code: (result: Result) -> Unit) {
+        graphDb.beginTx().use { tx ->
+            code(graphDb.execute(cypher))
+            tx.success()
+        }
     }
 
-    fun runCypher(reportName: String, cypher: String) {
+
+    fun runCypher(reportName: String, cypher: String): SimpleReportVisitor {
         val visitor = SimpleReportVisitor(reportName)
-        runCypher(visitor::reportVisit, cypher)
+        runCypher(cypher) { ctx ->
+            visitor.reportVisit(ctx)
+        }
+        return visitor
     }
 
-    fun runCypher(visitor: (ctx: ReportContext) -> Unit, cypher: String) {
-        Neo4jService.graphDb.beginTx().use { tx ->
-            //result = graphDb.execute(cypher)
-            visitor(ReportContext(ReportEvent.START_REPORT))
-            val srs = Neo4jService.graphDb.execute(cypher)
+
+    fun runCypher(cypher: String, visitor: (ctx: ReportContext) -> Unit) {
+        visitor(ReportContext(ReportEvent.START_REPORT))
+        execute(cypher) { srs ->
             var row = 0
             while (srs.hasNext()) {
                 visitor(ReportContext(ReportEvent.START_ROW, row = row))
@@ -150,7 +157,7 @@ object Neo4jService {
                         value.allProperties.forEach { prop ->
                             visitor(ReportContext(ReportEvent.DATA, name + "." + prop.key, prop.value, row, rcol++))
                         }
-                    } else if (value is Map<*,*>) {
+                    } else if (value is Map<*, *>) {
                         value.keys.forEach { prop ->
                             visitor(ReportContext(ReportEvent.DATA, name + "." + prop, value[prop], row, rcol++))
                         }
@@ -162,7 +169,6 @@ object Neo4jService {
                 ++row
             }
             visitor(ReportContext(ReportEvent.END_REPORT, row = row))
-            tx.success()
         }
     }
 

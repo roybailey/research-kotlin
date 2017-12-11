@@ -54,8 +54,11 @@ class Neo4jServiceTest {
 
         with(Neo4jService) {
             banner(testName.methodName) {
-                runCypher(pipeline::reportVisit,
-                        "match (m:Movie)-[:ACTED_IN]-(p:Person) return m as Movie, collect(p.name) as Actors order by Movie.title")
+                runCypher("""
+                        match (m:Movie)-[:ACTED_IN]-(p:Person)
+                        return m as Movie, collect(p.name) as Actors
+                        order by Movie.title""",
+                        pipeline::reportVisit)
                 val txtOutput = txtReport.toString()
                 val csvOutput = csvReport.toString()
                 println(txtOutput)
@@ -72,8 +75,11 @@ class Neo4jServiceTest {
 
         with(Neo4jService) {
             banner(testName.methodName) {
-                runCypher(pipeline::reportVisit,
-                        "match (m:Movie)-[:ACTED_IN]-(p:Person) return m {.title, .released}, collect(p {.name}) as Actors order by m.title")
+                runCypher("""
+                        match (m:Movie)-[:ACTED_IN]-(p:Person)
+                        return m {.title, .released}, collect(p {.name}) as Actors
+                        order by m.title""",
+                        pipeline::reportVisit)
                 val txtOutput = txtReport.toString()
                 val csvOutput = csvReport.toString()
                 println(txtOutput)
@@ -90,8 +96,11 @@ class Neo4jServiceTest {
 
         with(Neo4jService) {
             banner(testName.methodName) {
-                runCypher(pipeline::reportVisit,
-                        "match (m:Movie)-[:ACTED_IN]-(p:Person) return m.title, m.released, collect(p.name) as Actors order by m.title")
+                runCypher("""
+                        match (m:Movie)-[:ACTED_IN]-(p:Person)
+                        return m.title, m.released, collect(p.name) as Actors
+                        order by m.title""",
+                        pipeline::reportVisit)
                 val txtOutput = txtReport.toString()
                 val csvOutput = csvReport.toString()
                 println(txtOutput)
@@ -103,3 +112,4 @@ class Neo4jServiceTest {
     }
 
 }
+

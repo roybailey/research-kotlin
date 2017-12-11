@@ -3,10 +3,10 @@ package me.roybailey.research.kotlin.spark
 import me.roybailey.research.kotlin.neo4j.Neo4jService
 import me.roybailey.research.kotlin.report.CsvReportVisitor
 import me.roybailey.research.kotlin.report.ReportContext
-import me.roybailey.research.kotlin.report.ReportEvent
 import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.codehaus.jackson.map.ObjectMapper
+import org.eclipse.jetty.http.HttpHeader
 import spark.Request
 import spark.Response
 import spark.Spark.*
@@ -22,12 +22,11 @@ class Neo4jMovieApp {
 
     val mapper = ObjectMapper()
 
-    
     fun run() {
         with(Neo4jService) {
             init()
-            runCypher(loadCypher("/cypher/delete-movies.cypher")!!)
-            runCypher(loadCypher("/cypher/create-movies.cypher")!!)
+            execute(loadCypher("/cypher/delete-movies.cypher")!!) {}
+            execute(loadCypher("/cypher/create-movies.cypher")!!) {}
         }
 
         port(7000)
@@ -46,16 +45,19 @@ class Neo4jMovieApp {
         }
     }
 
-
     fun getMovies(req: Request, rsp: Response): String? = when {
-        (req.headers("Accept").startsWith("text")) -> {
+        (req.headers(HttpHeader.ACCEPT.asString()).startsWith("text")) -> {
+            rsp.header(HttpHeader.CONTENT_TYPE.asString(), "text/csv")
             val results = CsvReportVisitor("Unknown")
-            Neo4jService.runCypher(results::reportVisit, "match (m:Movie) return m")
-            mapper.writeValueAsString(results.toString())
+            Neo4jService.runCypher("match (m:Movie) return m", results::reportVisit)
+            results.toString()
         }
         else -> {
+            rsp.header(HttpHeader.CONTENT_TYPE.asString(), "application/json")
             val results = SimpleReportVisitor("Unknown")
-            Neo4jService.runCypher(results::reportVisit, "match (m:Movie) return m")
+            Neo4jService.runCypher("match (m:Movie) return m") { ctx ->
+                results.reportVisit(ctx)
+            }
             mapper.writeValueAsString(results.data)
         }
     }

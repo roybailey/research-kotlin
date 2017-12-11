@@ -6,14 +6,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
 import java.io.File
-import java.lang.String.valueOf
 
 
 class Neo4jJDBCImportTest {
 
     private val log = KotlinLogging.logger {}
 
-    @Rule
+    @Rule @JvmField
     val testName = TestName()
 
     @Test
@@ -35,7 +34,9 @@ class Neo4jJDBCImportTest {
                 row.QUANTITY as QUANTITY,
                 row.DISCOUNT as DISCOUNT
             """
-            runCypher(SimpleReportVisitor(testName.methodName)::reportVisit, cypherQuery)
+            val results = SimpleReportVisitor(testName.methodName)
+            runCypher(cypherQuery, results::reportVisit)
+            println(results)
         }
     }
 }

@@ -11,15 +11,20 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <kotlin.version>1.2.0</kotlin.version>
+
         <kotlin-logging.version>1.4.7</kotlin-logging.version>
         <slf4j.version>1.7.2</slf4j.version>
+
         <jackson.version>2.9.0</jackson.version>
         <sparkjava.version>2.7.1</sparkjava.version>
         <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
+
         <neo4j.version>3.3.1</neo4j.version>
         <neo4j.apoc.version>3.3.0.1</neo4j.apoc.version>
         <h2.version>1.4.196</h2.version>
+
         <super-csv.version>2.4.0</super-csv.version>
+
         <junit.version>4.12</junit.version>
         <mockk.version>1.4.2</mockk.version>
         <assertj.version>3.8.0</assertj.version>
@@ -108,7 +113,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
+            <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>

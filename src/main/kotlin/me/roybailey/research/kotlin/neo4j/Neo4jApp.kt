@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
 
     /* loads a ton of transactions to flood the tx logs for testing the settings */
     for (idx in 1..5000000) {
-        Neo4jService.runCypher(movies!!)
+        Neo4jService.runCypher("TransactionLogReportTest", movies!!)
         if(idx % 1000 == 0)
             println("loaded...$idx times")
     }
