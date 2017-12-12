@@ -29,15 +29,6 @@ import java.io.File
 import java.util.*
 
 
-class Neo4jServiceProcedures {
-
-    @UserFunction("custom.data.encrypt")
-    fun format(@Name("value") value: String,
-               @Name(value = "key", defaultValue = "") key: String): String =
-            String(Base64.getEncoder().encode(value.toByteArray()))
-}
-
-
 class Neo4jService {
 
     private val log = KotlinLogging.logger {}
@@ -100,6 +91,9 @@ class Neo4jService {
         })
     }
 
+    fun shutdown() {
+        graphDb.shutdown()
+    }
 
     fun isEmbedded(): Boolean = true
 
@@ -182,4 +176,12 @@ class Neo4jService {
         }
     }
 
+}
+
+class Neo4jServiceProcedures {
+
+    @UserFunction("custom.data.encrypt")
+    fun format(@Name("value") value: String,
+               @Name(value = "key", defaultValue = "") key: String): String =
+            String(Base64.getEncoder().encode(value.toByteArray()))
 }

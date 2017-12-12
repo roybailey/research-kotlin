@@ -15,13 +15,13 @@ class Neo4jJDBCImportTest {
     @Rule @JvmField
     val testName = TestName()
 
-    val neo4j = Neo4jService()
-
     @Test
     fun `Test Neo4j JDBC Load`() {
 
+        val neo4j = Neo4jService()
+
         with(neo4j) {
-            val csvTestData = File("./src/test/resources/testdata/").absolutePath + "/SampleCSVFile_53000kb.csv"
+            val csvTestData = File("./src/test/resources/testdata/").absolutePath + "/SampleCSVFile_2kb.csv"
             val selectQuery = "SELECT * FROM CSVREAD('$csvTestData')"
             val cypherQuery = """CALL apoc.load.jdbc('jdbc:h2:mem:test;DB_CLOSE_DELAY=-1',"$selectQuery") YIELD row
                 RETURN
@@ -37,6 +37,8 @@ class Neo4jJDBCImportTest {
             val results = SimpleReportVisitor(testName.methodName)
             runCypher(cypherQuery, results::reportVisit)
             println(results)
+
+            shutdown()
         }
     }
 }

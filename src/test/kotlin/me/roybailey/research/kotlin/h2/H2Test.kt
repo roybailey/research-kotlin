@@ -42,7 +42,7 @@ class H2Test {
         val connection = getDBConnection()
         var selectPreparedStatement: PreparedStatement? = null
 
-        val csvTestData = File("./src/test/resources/testdata/").absolutePath+"/SampleCSVFile_53000kb.csv"
+        val csvTestData = File("./src/test/resources/testdata/").absolutePath+"/SampleCSVFile_2kb.csv"
         val SelectQuery = "SELECT * FROM CSVREAD('$csvTestData')"
 
         log.info { SelectQuery }
