@@ -1,8 +1,8 @@
 package me.roybailey.research.kotlin.report
 
-import au.com.bytecode.opencsv.CSVWriter
 import mu.KotlinLogging
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
 import java.io.Reader
 import java.io.StringWriter
 import java.io.Writer
@@ -17,9 +17,9 @@ class CsvReportVisitor(
 
     private val log = KotlinLogging.logger {}
 
-    val printer = CSVWriter(writer, delimiter)
+    val printer = CSVPrinter(writer, CSVFormat.RFC4180.withDelimiter(delimiter))
     val listColumns = mutableListOf<String>()
-    val listValues = mutableListOf<String>()
+    val listValues = mutableListOf<Any>()
 
     fun reportVisit(ctx: ReportContext): ReportContext = when (ctx.evt) {
         ReportEvent.START_REPORT -> {
@@ -35,9 +35,9 @@ class CsvReportVisitor(
         }
         ReportEvent.END_ROW -> {
             if (ctx.row == 0) {
-                printer.writeNext(listColumns.toTypedArray())
+                printer.printRecord(listColumns)
             }
-            printer.writeNext(listValues.toTypedArray())
+            printer.printRecord(listValues)
             listValues.clear()
             ctx
         }

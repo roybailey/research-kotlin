@@ -30,31 +30,19 @@ class Neo4jReportRunner(val neo4j: Neo4jService) : ReportRunner {
 
                     val value = record.getValue(name)
                     ctx = ctx.copy(evt = ReportEvent.DATA)
-                    if (value is Node) {
-                        value.allProperties.forEach { prop ->
+                    when (value) {
+                        is Node -> value.allProperties.forEach { prop ->
                             ctx = visitor(ctx.copy(name = name + "." + prop.key, value = prop.value, column = ctx.column+1))
                         }
-                    } else if (value is Map<*, *>) {
-                        value.keys.forEach { prop ->
+                        is Map<*, *> -> value.keys.forEach { prop ->
                             ctx = visitor(ctx.copy(name = name + "." + prop, value = value[prop], column = ctx.column+1))
                         }
-                    } else {
-                        ctx = visitor(ctx.copy(name = name, value = value, column = ctx.column+1))
+                        else -> ctx = visitor(ctx.copy(name = name, value = value, column = ctx.column+1))
                     }
-                    ""
                 }
                 ctx = visitor(ctx.copy(evt = ReportEvent.END_ROW))
             }
             ctx = visitor(ctx.copy(evt = ReportEvent.END_REPORT))
-        }
-    }
-
-    fun processNeo4jColumns(ctx: ReportContext) {
-
-        when (ctx.evt) {
-            ReportEvent.DATA -> {
-                // placeholder for Neo4j specific data type processing
-            }
         }
     }
 }

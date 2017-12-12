@@ -81,7 +81,8 @@ class ReportDefinitionTest : BaseServiceTest() {
                         ReportColumn("BRAND"),
                         ReportColumn("QUANTITY", Int.javaClass.simpleName),
                         ReportColumn("DISCOUNT")
-                        ))
+                        )
+        )
 
         val reportName = testName.methodName
         val file = File("./target/" + reportName.replace(' ', '_') + ".csv")
@@ -100,9 +101,9 @@ class ReportDefinitionTest : BaseServiceTest() {
         assertThat(csv.listColumns).hasSize(9)
         assertThat(csv.data[0])
                 .hasSize(9)
-                //.contains("Muhammed MacIntyre") // base64 encoded name decoded while processing
+                .contains("Muhammed MacIntyre") // base64 encoded name decoded while processing
                 .contains("STORAGE_ORGANIZATION") // uppercase category
-                //.contains(3) // quantity as number
+                .contains(3) // quantity as number
     }
 }
 
