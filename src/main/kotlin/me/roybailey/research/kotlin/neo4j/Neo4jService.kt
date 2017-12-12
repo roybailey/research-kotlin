@@ -10,6 +10,7 @@ import apoc.load.Xml
 import apoc.meta.Meta
 import apoc.path.PathExplorer
 import apoc.refactor.GraphRefactoring
+import me.roybailey.research.kotlin.report.CompositeReportVisitor
 import me.roybailey.research.kotlin.report.ReportContext
 import me.roybailey.research.kotlin.report.ReportEvent
 import me.roybailey.research.kotlin.report.SimpleReportVisitor
@@ -143,7 +144,18 @@ object Neo4jService {
     }
 
 
-    fun runCypher(cypher: String, visitor: (ctx: ReportContext) -> Unit) {
+    fun processNeo4jColumns(ctx: ReportContext) {
+
+        when (ctx.evt) {
+            ReportEvent.DATA -> {
+                // placeholder for Neo4j specific data type processing
+            }
+        }
+    }
+
+
+    fun runCypher(cypher: String, suppliedVisitor: (ctx: ReportContext) -> Unit) {
+        val visitor = CompositeReportVisitor(this::processNeo4jColumns, suppliedVisitor)::reportVisit
         visitor(ReportContext(ReportEvent.START_REPORT))
         execute(cypher) { srs ->
             var row = 0

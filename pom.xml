@@ -23,6 +23,7 @@
         <neo4j.apoc.version>3.3.0.1</neo4j.apoc.version>
         <h2.version>1.4.196</h2.version>
 
+        <apache-csv.version>1.5</apache-csv.version>
         <super-csv.version>2.4.0</super-csv.version>
         <pdfbox.version>2.0.4</pdfbox.version>
         <pdfboxable.version>1.4</pdfboxable.version>
@@ -98,6 +99,11 @@
             <version>${h2.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>${apache-csv.version}</version>
+        </dependency>
         <dependency>
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>

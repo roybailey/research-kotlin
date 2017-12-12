@@ -54,7 +54,7 @@ class PdfBoxTest {
         dataTable.draw()
 
         document.addPage(page1)
-        document.save("./target/test.pdf")
+        document.save("./target/Test_Apache_PdfBox.pdf")
         document.close()
     }
 
@@ -85,7 +85,7 @@ class PdfBoxTest {
         val t = DataTable(dataTable, page)
         t.addListToTable(data, DataTable.HASHEADER)
         dataTable.draw()
-        val file = File("target/ListExampleLandscape.pdf")
+        val file = File("target/Test_PdfBoxable_Sample.pdf")
         System.out.println("Sample file saved at : " + file.absolutePath)
         Files.createParentDirs(file)
         doc.save(file)

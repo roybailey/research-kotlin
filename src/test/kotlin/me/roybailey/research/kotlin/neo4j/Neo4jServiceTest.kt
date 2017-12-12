@@ -1,12 +1,13 @@
 package me.roybailey.research.kotlin.neo4j
 
-import me.roybailey.research.kotlin.report.CompositeReportVisitor
-import me.roybailey.research.kotlin.report.CsvReportVisitor
-import me.roybailey.research.kotlin.report.SimpleReportVisitor
+import me.roybailey.research.kotlin.report.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.*
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestName
-import me.roybailey.research.kotlin.neo4j.Neo4jService
+import java.io.FileOutputStream
 
 
 class Neo4jServiceTest {
@@ -37,8 +38,11 @@ class Neo4jServiceTest {
     val testName = TestName()
 
 
+    private val BASEPATH = "./target/"
     private var txtReport: SimpleReportVisitor = SimpleReportVisitor(Neo4jServiceTest::class.java.simpleName)
     private var csvReport: CsvReportVisitor = CsvReportVisitor(Neo4jServiceTest::class.java.simpleName)
+    private var pdfReport: PdfReportVisitor = PdfReportVisitor(Neo4jServiceTest::class.java.simpleName)
+    private var xlsReport: ExcelReportVisitor = ExcelReportVisitor(Neo4jServiceTest::class.java.simpleName)
     private var pipeline: CompositeReportVisitor = CompositeReportVisitor()
 
 
@@ -46,7 +50,16 @@ class Neo4jServiceTest {
     fun setupVisitors() {
         txtReport = SimpleReportVisitor(testName.methodName)
         csvReport = CsvReportVisitor(testName.methodName)
-        pipeline = CompositeReportVisitor(txtReport::reportVisit, csvReport::reportVisit)
+        pdfReport = PdfReportVisitor(testName.methodName,
+                FileOutputStream(BASEPATH+testName.methodName.replace(' ','_')+".pdf"))
+        xlsReport = ExcelReportVisitor(testName.methodName,
+                FileOutputStream(BASEPATH+testName.methodName.replace(' ','_')+".xls"))
+        pipeline = CompositeReportVisitor(
+                txtReport::reportVisit,
+                csvReport::reportVisit,
+                pdfReport::reportVisit,
+                xlsReport::reportVisit
+        )
     }
 
 
