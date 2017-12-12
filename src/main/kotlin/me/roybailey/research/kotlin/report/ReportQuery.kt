@@ -1,6 +1,7 @@
 package me.roybailey.research.kotlin.report
 
 import mu.KotlinLogging
+import org.bouncycastle.util.encoders.Base64
 import java.lang.Math.max
 import java.lang.String.valueOf
 
@@ -26,11 +27,21 @@ data class ReportContext(
 
 typealias ReportVisitor = (ctx: ReportContext) -> ReportContext
 
+object StandardReportVisitor {
+    fun decoders(ctx: ReportContext): ReportContext = when (ctx.evt) {
+        ReportEvent.DATA -> {
+            when(ctx.meta[ctx.column].format) {
+                "BASE64:DECODER" -> ctx.copy(value = Base64.decode(valueOf(ctx.value)))
+            }
+            ctx
+        }
+        else -> ctx
+    }
+}
 
 class CompositeReportVisitor(vararg args: ReportVisitor) {
 
-    val visitors = mutableListOf(*args)
-
+    val visitors = mutableListOf(StandardReportVisitor::decoders, *args)
     fun reportVisit(ctxArg: ReportContext): ReportContext {
         var ctx = ctxArg
         visitors.forEach {
