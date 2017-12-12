@@ -22,6 +22,7 @@ class Neo4jMovieApp {
     val neo4j = Neo4jService()
     val mapper = ObjectMapper()
 
+
     fun run() {
         with(neo4j) {
             execute(loadCypher("/cypher/delete-movies.cypher")!!) {}
@@ -44,19 +45,18 @@ class Neo4jMovieApp {
         }
     }
 
+
     fun getMovies(req: Request, rsp: Response): String? = when {
         (req.headers(HttpHeader.ACCEPT.asString()).startsWith("text")) -> {
             rsp.header(HttpHeader.CONTENT_TYPE.asString(), "text/csv")
             val results = CsvReportVisitor("Unknown")
-            neo4j.runCypher("match (m:Movie) return m", results::reportVisit)
+            //neo4j.runCypher("match (m:Movie) return m", results::reportVisit)
             results.toString()
         }
         else -> {
             rsp.header(HttpHeader.CONTENT_TYPE.asString(), "application/json")
             val results = SimpleReportVisitor("Unknown")
-            neo4j.runCypher("match (m:Movie) return m") { ctx ->
-                results.reportVisit(ctx)
-            }
+            //neo4j.runCypher("match (m:Movie) return m", results::reportVisit)
             mapper.writeValueAsString(results.data)
         }
     }

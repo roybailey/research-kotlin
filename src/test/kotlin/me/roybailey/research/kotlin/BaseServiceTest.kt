@@ -1,6 +1,8 @@
 package me.roybailey.research.kotlin
 
+import me.roybailey.research.kotlin.neo4j.Neo4jReportRunner
 import me.roybailey.research.kotlin.neo4j.Neo4jService
+import me.roybailey.research.kotlin.report.ReportRunner
 import me.roybailey.research.kotlin.report.ReportService
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -13,6 +15,7 @@ open class BaseServiceTest {
     companion object {
 
         lateinit var neo4j: Neo4jService
+        lateinit var neo4jReportRunner: ReportRunner
         lateinit var reportService: ReportService
 
         fun banner(message: String, body: () -> Unit) {
@@ -26,11 +29,12 @@ open class BaseServiceTest {
         fun setupDatabase() {
             banner("SetupDatabase") {
                 neo4j = Neo4jService()
+                neo4jReportRunner = Neo4jReportRunner(neo4j)
                 reportService = ReportService(neo4j)
 
                 with(neo4j) {
-                    runCypher("ClearDatabase", loadCypher("/cypher/delete-movies.cypher")!!)
-                    runCypher("LoadMatrix", loadCypher("/cypher/create-movies.cypher")!!)
+                    execute(loadCypher("/cypher/delete-movies.cypher")!!) {}
+                    execute(loadCypher("/cypher/create-movies.cypher")!!) {}
                 }
             }
         }

@@ -23,15 +23,17 @@ class PdfReportVisitor(
     val listColumns = mutableListOf<Any?>()
     val listValues = mutableListOf<Any?>()
 
-    fun reportVisit(ctx: ReportContext) = when (ctx.evt) {
+    fun reportVisit(ctx: ReportContext): ReportContext = when (ctx.evt) {
         ReportEvent.START_REPORT -> {
             log.info("$reportName ${ctx.evt}")
+            ctx
         }
         ReportEvent.DATA -> {
             if (ctx.row == 0) {
                 listColumns += ctx.name!!
             }
             listValues += valueOf(ctx.value)
+            ctx
         }
         ReportEvent.END_ROW -> {
             if (ctx.row == 0) {
@@ -41,13 +43,14 @@ class PdfReportVisitor(
                 listValues += ""
             data += listValues.toMutableList()
             listValues.clear()
+            ctx
         }
         ReportEvent.END_REPORT -> {
             log.info("$reportName ${ctx.evt}")
             writePdfReport()
+            ctx
         }
-        else -> {
-        }
+        else -> ctx
     }
 
     fun writePdfReport() {

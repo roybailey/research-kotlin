@@ -21,15 +21,17 @@ class CsvReportVisitor(
     val listColumns = mutableListOf<String>()
     val listValues = mutableListOf<String>()
 
-    fun reportVisit(ctx: ReportContext) = when (ctx.evt) {
+    fun reportVisit(ctx: ReportContext): ReportContext = when (ctx.evt) {
         ReportEvent.START_REPORT -> {
             log.info("$reportName${ctx.evt}")
+            ctx
         }
         ReportEvent.DATA -> {
             if (ctx.row == 0) {
                 listColumns += ctx.name!!
             }
             listValues += valueOf(ctx.value)
+            ctx
         }
         ReportEvent.END_ROW -> {
             if (ctx.row == 0) {
@@ -37,13 +39,14 @@ class CsvReportVisitor(
             }
             printer.writeNext(listValues.toTypedArray())
             listValues.clear()
+            ctx
         }
         ReportEvent.END_REPORT -> {
             log.info("$reportName${ctx.evt}")
             printer.flush()
+            ctx
         }
-        else -> {
-        }
+        else -> ctx
     }
 
     override fun toString(): String = writer.toString()

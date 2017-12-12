@@ -16,24 +16,27 @@ enum class ReportEvent {
 
 data class ReportContext(
         val evt: ReportEvent,
-        val name: String? = null,
-        val value: Any? = null,
-        val row: Int? = null,
-        val column: Int? = null
+        val name: String,
+        val meta: List<ReportColumn>,
+        val row: Int = -1,
+        val column: Int = -1,
+        val value: Any? = null
 )
 
 
-typealias ReportVisitor = (ctx: ReportContext) -> Unit
+typealias ReportVisitor = (ctx: ReportContext) -> ReportContext
 
 
 class CompositeReportVisitor(vararg args: ReportVisitor) {
 
     val visitors = mutableListOf(*args)
 
-    fun reportVisit(ctx: ReportContext) {
+    fun reportVisit(ctxArg: ReportContext): ReportContext {
+        var ctx = ctxArg
         visitors.forEach {
-            it(ctx)
+            ctx = it(ctx)
         }
+        return ctx
     }
 }
 
@@ -49,9 +52,11 @@ class SimpleReportVisitor(val reportName: String) {
     fun reportVisit(ctx: ReportContext) = when (ctx.evt) {
         ReportEvent.START_REPORT -> {
             log.info("$reportName${ctx.evt}")
+            ctx
         }
         ReportEvent.START_ROW -> {
             data += mutableMapOf()
+            ctx
         }
         ReportEvent.DATA -> {
             if (ctx.row == 0) {
@@ -60,12 +65,12 @@ class SimpleReportVisitor(val reportName: String) {
             }
             data[ctx.row!!].put(listColumns[ctx.column!!], ctx.value)
             listColumnWidths[ctx.column] = max(listColumnWidths[ctx.column], valueOf(ctx.value).length)
-            Unit
+            ctx
         }
-        ReportEvent.END_ROW -> {
-        }
+        ReportEvent.END_ROW -> ctx
         ReportEvent.END_REPORT -> {
             log.info("$reportName${ctx.evt}")
+            ctx
         }
     }
 

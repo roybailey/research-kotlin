@@ -23,9 +23,9 @@ class Neo4jServiceTest : BaseServiceTest() {
         txtReport = SimpleReportVisitor(testName.methodName)
         csvReport = CsvReportVisitor(testName.methodName)
         pdfReport = PdfReportVisitor(testName.methodName,
-                FileOutputStream(BASEPATH+testName.methodName.replace(' ','_')+".pdf"))
+                FileOutputStream(BASEPATH + testName.methodName.replace(' ', '_') + ".pdf"))
         xlsReport = ExcelReportVisitor(testName.methodName,
-                FileOutputStream(BASEPATH+testName.methodName.replace(' ','_')+".xls"))
+                FileOutputStream(BASEPATH + testName.methodName.replace(' ', '_') + ".xls"))
         pipeline = CompositeReportVisitor(
                 txtReport::reportVisit,
                 csvReport::reportVisit,
@@ -38,20 +38,19 @@ class Neo4jServiceTest : BaseServiceTest() {
     @Test
     fun `Test Neo4j Nodes`() {
 
-        with(neo4j) {
-            banner(testName.methodName) {
-                runCypher("""
-                        match (m:Movie)-[:ACTED_IN]-(p:Person)
-                        return m as Movie, collect(p.name) as Actors
-                        order by Movie.title""",
-                        pipeline::reportVisit)
-                val txtOutput = txtReport.toString()
-                val csvOutput = csvReport.toString()
-                println(txtOutput)
-                println(csvOutput)
-                assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-                assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-            }
+        banner(testName.methodName) {
+            neo4jReportRunner.runReport(
+                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
+                    match (m:Movie)-[:ACTED_IN]-(p:Person)
+                    return m as Movie, collect(p.name) as Actors
+                    order by Movie.title"""),
+                    pipeline::reportVisit)
+            val txtOutput = txtReport.toString()
+            val csvOutput = csvReport.toString()
+            println(txtOutput)
+            println(csvOutput)
+            assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
+            assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
         }
     }
 
@@ -59,20 +58,19 @@ class Neo4jServiceTest : BaseServiceTest() {
     @Test
     fun `Test Neo4j Node Properties`() {
 
-        with(neo4j) {
-            banner(testName.methodName) {
-                runCypher("""
+        banner(testName.methodName) {
+            neo4jReportRunner.runReport(
+                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
                         return m {.title, .released}, collect(p {.name}) as Actors
-                        order by m.title""",
-                        pipeline::reportVisit)
-                val txtOutput = txtReport.toString()
-                val csvOutput = csvReport.toString()
-                println(txtOutput)
-                println(csvOutput)
-                assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-                assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-            }
+                        order by m.title"""),
+                    pipeline::reportVisit)
+            val txtOutput = txtReport.toString()
+            val csvOutput = csvReport.toString()
+            println(txtOutput)
+            println(csvOutput)
+            assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
+            assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
         }
     }
 
@@ -80,20 +78,19 @@ class Neo4jServiceTest : BaseServiceTest() {
     @Test
     fun `Test Neo4j ResultSet`() {
 
-        with(neo4j) {
-            banner(testName.methodName) {
-                runCypher("""
+        banner(testName.methodName) {
+            neo4jReportRunner.runReport(
+                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
                         return m.title, m.released, collect(p.name) as Actors
-                        order by m.title""",
-                        pipeline::reportVisit)
-                val txtOutput = txtReport.toString()
-                val csvOutput = csvReport.toString()
-                println(txtOutput)
-                println(csvOutput)
-                assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-                assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
-            }
+                        order by m.title"""),
+                    pipeline::reportVisit)
+            val txtOutput = txtReport.toString()
+            val csvOutput = csvReport.toString()
+            println(txtOutput)
+            println(csvOutput)
+            assertThat(txtOutput.split("\n")[1]).contains("1992", "A Few Good Men")
+            assertThat(csvOutput.split("\n")[1]).contains("1992", "A Few Good Men")
         }
     }
 

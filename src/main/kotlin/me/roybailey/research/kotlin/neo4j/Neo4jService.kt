@@ -10,13 +10,8 @@ import apoc.load.Xml
 import apoc.meta.Meta
 import apoc.path.PathExplorer
 import apoc.refactor.GraphRefactoring
-import me.roybailey.research.kotlin.report.CompositeReportVisitor
-import me.roybailey.research.kotlin.report.ReportContext
-import me.roybailey.research.kotlin.report.ReportEvent
-import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.Result
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.neo4j.kernel.api.exceptions.KernelException
@@ -123,56 +118,6 @@ class Neo4jService {
         graphDb.beginTx().use { tx ->
             code(graphDb.execute(cypher))
             tx.success()
-        }
-    }
-
-
-    fun runCypher(reportName: String, cypher: String): SimpleReportVisitor {
-        val visitor = SimpleReportVisitor(reportName)
-        runCypher(cypher) { ctx ->
-            visitor.reportVisit(ctx)
-        }
-        return visitor
-    }
-
-
-    fun processNeo4jColumns(ctx: ReportContext) {
-
-        when (ctx.evt) {
-            ReportEvent.DATA -> {
-                // placeholder for Neo4j specific data type processing
-            }
-        }
-    }
-
-
-    fun runCypher(cypher: String, suppliedVisitor: (ctx: ReportContext) -> Unit) {
-        val visitor = CompositeReportVisitor(this::processNeo4jColumns, suppliedVisitor)::reportVisit
-        visitor(ReportContext(ReportEvent.START_REPORT))
-        execute(cypher) { srs ->
-            var row = 0
-            while (srs.hasNext()) {
-                visitor(ReportContext(ReportEvent.START_ROW, row = row))
-                val record = srs.next()
-                var rcol = 0
-                srs.columns().forEachIndexed { col, name ->
-                    val value = record.getValue(name)
-                    if (value is Node) {
-                        value.allProperties.forEach { prop ->
-                            visitor(ReportContext(ReportEvent.DATA, name + "." + prop.key, prop.value, row, rcol++))
-                        }
-                    } else if (value is Map<*, *>) {
-                        value.keys.forEach { prop ->
-                            visitor(ReportContext(ReportEvent.DATA, name + "." + prop, value[prop], row, rcol++))
-                        }
-                    } else {
-                        visitor(ReportContext(ReportEvent.DATA, name, value, row, rcol++))
-                    }
-                }
-                visitor(ReportContext(ReportEvent.END_ROW, row = row))
-                ++row
-            }
-            visitor(ReportContext(ReportEvent.END_REPORT, row = row))
         }
     }
 

@@ -1,5 +1,7 @@
 package me.roybailey.research.kotlin.neo4j
 
+import me.roybailey.research.kotlin.report.QueryType
+import me.roybailey.research.kotlin.report.ReportDefinition
 import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.junit.Rule
@@ -12,13 +14,15 @@ class Neo4jJDBCImportTest {
 
     private val log = KotlinLogging.logger {}
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     val testName = TestName()
 
     @Test
     fun `Test Neo4j JDBC Load`() {
 
         val neo4j = Neo4jService()
+        val neo4jReportRunner = Neo4jReportRunner(neo4j)
 
         with(neo4j) {
             val csvTestData = File("./src/test/resources/testdata/").absolutePath + "/SampleCSVFile_2kb.csv"
@@ -35,7 +39,10 @@ class Neo4jJDBCImportTest {
                 row.DISCOUNT as DISCOUNT
             """
             val results = SimpleReportVisitor(testName.methodName)
-            runCypher(cypherQuery, results::reportVisit)
+            neo4jReportRunner.runReport(
+                    ReportDefinition(testName.methodName, QueryType.NEO4J, cypherQuery),
+                    results::reportVisit
+            )
             println(results)
 
             shutdown()
