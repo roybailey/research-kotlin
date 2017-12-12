@@ -1,42 +1,14 @@
 package me.roybailey.research.kotlin.neo4j
 
+import me.roybailey.research.kotlin.BaseServiceTest
 import me.roybailey.research.kotlin.report.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestName
 import java.io.FileOutputStream
 
 
-class Neo4jServiceTest {
-
-    companion object {
-        fun banner(message: String, body: () -> Unit) {
-            println("########## $message ##########")
-            body()
-            println()
-        }
-
-        @JvmStatic
-        @BeforeClass
-        fun setupDatabase() {
-            banner("SetupDatabase") {
-                with(Neo4jService) {
-                    init()
-                    runCypher("ClearDatabase", loadCypher("/cypher/delete-movies.cypher")!!)
-                    runCypher("LoadMatrix", Neo4jService.loadCypher("/cypher/create-movies.cypher")!!)
-                }
-            }
-        }
-    }
-
-
-    @Rule
-    @JvmField
-    val testName = TestName()
-
+class Neo4jServiceTest : BaseServiceTest() {
 
     private val BASEPATH = "./target/"
     private var txtReport: SimpleReportVisitor = SimpleReportVisitor(Neo4jServiceTest::class.java.simpleName)
@@ -66,7 +38,7 @@ class Neo4jServiceTest {
     @Test
     fun `Test Neo4j Nodes`() {
 
-        with(Neo4jService) {
+        with(neo4j) {
             banner(testName.methodName) {
                 runCypher("""
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
@@ -87,7 +59,7 @@ class Neo4jServiceTest {
     @Test
     fun `Test Neo4j Node Properties`() {
 
-        with(Neo4jService) {
+        with(neo4j) {
             banner(testName.methodName) {
                 runCypher("""
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
@@ -108,7 +80,7 @@ class Neo4jServiceTest {
     @Test
     fun `Test Neo4j ResultSet`() {
 
-        with(Neo4jService) {
+        with(neo4j) {
             banner(testName.methodName) {
                 runCypher("""
                         match (m:Movie)-[:ACTED_IN]-(p:Person)

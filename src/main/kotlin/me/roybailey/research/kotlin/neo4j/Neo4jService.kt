@@ -38,26 +38,24 @@ class Neo4jServiceProcedures {
 }
 
 
-object Neo4jService {
+class Neo4jService {
 
     private val log = KotlinLogging.logger {}
 
-    val neo4jDatabaseFolder = File("./target/neo4j").absoluteFile
+    lateinit var neo4jDatabaseFolder: File
     val neo4jConfiguration = Neo4jService::class.java.getResource("/neo4j.conf")
     val neo4jProperties = Properties()
 
     lateinit var graphDb: GraphDatabaseService
 
-
-    fun init() {
-
+    init {
+        neo4jProperties.load(neo4jConfiguration.openStream())
+        neo4jDatabaseFolder = File(neo4jProperties.getProperty("neo4j.graphdb.folder", "./target/neo4j")).absoluteFile
         log.info("Creating Neo4j Embedded Database into: " + neo4jDatabaseFolder)
 
         val graphDbBuilder = GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(neo4jDatabaseFolder)
                 .loadPropertiesFromURL(neo4jConfiguration)
-
-        neo4jProperties.load(neo4jConfiguration.openStream())
 
         val boltConnectorPort = neo4jProperties.getProperty("neo4j.bolt.connector.port", "")
 

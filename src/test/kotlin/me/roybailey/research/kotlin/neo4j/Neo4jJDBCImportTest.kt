@@ -15,12 +15,12 @@ class Neo4jJDBCImportTest {
     @Rule @JvmField
     val testName = TestName()
 
+    val neo4j = Neo4jService()
+
     @Test
     fun `Test Neo4j JDBC Load`() {
 
-        with(me.roybailey.research.kotlin.neo4j.Neo4jService) {
-            init()
-
+        with(neo4j) {
             val csvTestData = File("./src/test/resources/testdata/").absolutePath + "/SampleCSVFile_53000kb.csv"
             val selectQuery = "SELECT * FROM CSVREAD('$csvTestData')"
             val cypherQuery = """CALL apoc.load.jdbc('jdbc:h2:mem:test;DB_CLOSE_DELAY=-1',"$selectQuery") YIELD row

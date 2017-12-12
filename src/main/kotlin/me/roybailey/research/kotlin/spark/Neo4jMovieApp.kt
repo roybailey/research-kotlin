@@ -2,7 +2,6 @@ package me.roybailey.research.kotlin.spark
 
 import me.roybailey.research.kotlin.neo4j.Neo4jService
 import me.roybailey.research.kotlin.report.CsvReportVisitor
-import me.roybailey.research.kotlin.report.ReportContext
 import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
 import org.codehaus.jackson.map.ObjectMapper
@@ -20,11 +19,11 @@ class Neo4jMovieApp {
 
     private val log = KotlinLogging.logger {}
 
+    val neo4j = Neo4jService()
     val mapper = ObjectMapper()
 
     fun run() {
-        with(Neo4jService) {
-            init()
+        with(neo4j) {
             execute(loadCypher("/cypher/delete-movies.cypher")!!) {}
             execute(loadCypher("/cypher/create-movies.cypher")!!) {}
         }
@@ -49,13 +48,13 @@ class Neo4jMovieApp {
         (req.headers(HttpHeader.ACCEPT.asString()).startsWith("text")) -> {
             rsp.header(HttpHeader.CONTENT_TYPE.asString(), "text/csv")
             val results = CsvReportVisitor("Unknown")
-            Neo4jService.runCypher("match (m:Movie) return m", results::reportVisit)
+            neo4j.runCypher("match (m:Movie) return m", results::reportVisit)
             results.toString()
         }
         else -> {
             rsp.header(HttpHeader.CONTENT_TYPE.asString(), "application/json")
             val results = SimpleReportVisitor("Unknown")
-            Neo4jService.runCypher("match (m:Movie) return m") { ctx ->
+            neo4j.runCypher("match (m:Movie) return m") { ctx ->
                 results.reportVisit(ctx)
             }
             mapper.writeValueAsString(results.data)

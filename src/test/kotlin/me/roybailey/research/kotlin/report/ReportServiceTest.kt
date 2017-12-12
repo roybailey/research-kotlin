@@ -1,46 +1,15 @@
 package me.roybailey.research.kotlin.report
 
 import com.google.common.net.MediaType
-import me.roybailey.research.kotlin.neo4j.Neo4jService
+import me.roybailey.research.kotlin.BaseServiceTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.BeforeClass
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestName
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
 
 
-class ReportDefinitionTest {
-
-    companion object {
-        fun banner(message: String, body: () -> Unit) {
-            println("########## $message ##########")
-            body()
-            println()
-        }
-
-        @JvmStatic
-        @BeforeClass
-        fun setupDatabase() {
-            banner("SetupDatabase") {
-                with(Neo4jService) {
-                    init()
-                    runCypher("ClearDatabase", loadCypher("/cypher/delete-movies.cypher")!!)
-                    runCypher("LoadMatrix", loadCypher("/cypher/create-movies.cypher")!!)
-                }
-            }
-        }
-    }
-
-
-    @Rule
-    @JvmField
-    val testName = TestName()
-
-    val reportService = ReportService()
-
+class ReportDefinitionTest : BaseServiceTest() {
 
     @Test
     fun `Test Simple CSV File`() {

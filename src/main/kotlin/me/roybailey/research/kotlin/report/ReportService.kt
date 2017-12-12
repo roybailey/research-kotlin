@@ -7,7 +7,6 @@ import me.roybailey.research.kotlin.neo4j.Neo4jService
 import mu.KotlinLogging
 import java.io.OutputStream
 import java.io.OutputStreamWriter
-import java.lang.String.valueOf
 import java.util.concurrent.TimeUnit
 
 
@@ -38,7 +37,7 @@ data class ReportOutput(
 )
 
 
-class ReportService {
+class ReportService(val neo4j: Neo4jService) {
 
     private val log = KotlinLogging.logger {}
 
@@ -60,7 +59,7 @@ class ReportService {
         log.info("Running Report Query Type ${report.queryType}")
         log.debug("Running Report Query \n${report.query}\n")
         when(report.queryType) {
-            QueryType.NEO4J -> Neo4jService.runCypher(report.query, visitors::reportVisit)
+            QueryType.NEO4J -> neo4j.runCypher(report.query, visitors::reportVisit)
         }
 
         log.info("Completed Report [${report.reportName}] in ${stopwatch.elapsed(TimeUnit.SECONDS)} seconds")
