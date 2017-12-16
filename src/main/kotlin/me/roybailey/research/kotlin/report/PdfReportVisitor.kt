@@ -2,18 +2,18 @@ package me.roybailey.research.kotlin.report
 
 import be.quodlibet.boxable.BaseTable
 import be.quodlibet.boxable.datatable.DataTable
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import mu.KotlinLogging
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.common.PDRectangle
+import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.lang.String.valueOf
 
 
 class PdfReportVisitor(
         val reportName: String,
-        val writer: OutputStream = ByteOutputStream()
+        val writer: OutputStream = ByteArrayOutputStream()
 ) {
 
     private val log = KotlinLogging.logger {}

@@ -3,6 +3,7 @@ package me.roybailey.research.kotlin.report
 import mu.KotlinLogging
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
+import org.apache.commons.csv.QuoteMode
 import java.io.Reader
 import java.io.StringWriter
 import java.io.Writer
@@ -27,6 +28,7 @@ class CsvReportVisitor(
             ctx
         }
         ReportEvent.DATA -> {
+            log.debug(ctx.toColumnString())
             if (ctx.row == 0) {
                 listColumns += ctx.name!!
             }
@@ -59,7 +61,9 @@ class CsvReportReader {
     val data = mutableListOf<List<Any>>()
 
     fun read(reader: Reader): CsvReportReader {
-        val records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader)
+        val records = CSVFormat.RFC4180
+                .withFirstRecordAsHeader()
+                .parse(reader)
         listColumns.addAll(records.headerMap.keys)
         for (record in records) {
             val row = mutableListOf<Any>()

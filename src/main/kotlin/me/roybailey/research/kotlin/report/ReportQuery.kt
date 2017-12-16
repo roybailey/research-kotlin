@@ -22,30 +22,41 @@ data class ReportContext(
         val row: Int = -1,
         val column: Int = -1,
         val value: Any? = null
-)
+) {
+    fun toColumnString():String = "row=${row} col=${column} name=${name} meta=${meta[column]} valueType=${value?.javaClass?.simpleName} value=${value}"
+}
 
 
 typealias ReportVisitor = (ctx: ReportContext) -> ReportContext
 
 object StandardReportVisitor {
+
     fun decoders(ctx: ReportContext): ReportContext = when (ctx.evt) {
-        ReportEvent.DATA -> {
-            when(ctx.meta[ctx.column].format) {
-                "BASE64:DECODER" -> ctx.copy(value = Base64.decode(valueOf(ctx.value)))
+        ReportEvent.DATA ->
+            when (ctx.meta[ctx.column].type) {
+                "BASE64:DECODE" -> ctx.copy(value = String(Base64.decode(valueOf(ctx.value))))
+                Int::class.java.simpleName -> ctx.copy(value = valueOf(ctx.value).toIntOrNull())
+                Double::class.java.simpleName -> ctx.copy(value = valueOf(ctx.value).toDoubleOrNull())
+                Boolean::class.java.simpleName -> ctx.copy(value = valueOf(ctx.value).toBoolean())
+                else -> ctx
             }
-            ctx
-        }
         else -> ctx
     }
 }
 
 class CompositeReportVisitor(vararg args: ReportVisitor) {
 
+    private val log = KotlinLogging.logger {}
+
     val visitors = mutableListOf(StandardReportVisitor::decoders, *args)
     fun reportVisit(ctxArg: ReportContext): ReportContext {
         var ctx = ctxArg
         visitors.forEach {
+            if (ctx.column >= 0)
+                log.debug(ctx.toColumnString())
             ctx = it(ctx)
+            if (ctx.column >= 0)
+                log.debug(ctx.toColumnString())
         }
         return ctx
     }

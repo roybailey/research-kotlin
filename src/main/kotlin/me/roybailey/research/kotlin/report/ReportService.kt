@@ -2,10 +2,10 @@ package me.roybailey.research.kotlin.report
 
 import com.google.common.base.Stopwatch
 import com.google.common.net.MediaType
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import me.roybailey.research.kotlin.neo4j.Neo4jReportRunner
 import me.roybailey.research.kotlin.neo4j.Neo4jService
 import mu.KotlinLogging
+import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.util.concurrent.TimeUnit
@@ -35,7 +35,7 @@ data class ReportDefinition(
 data class ReportOutput(
         val contentType: String = MediaType.CSV_UTF_8.toString(),
         val outputName: String,
-        val outputStream: OutputStream = ByteOutputStream()
+        val outputStream: OutputStream = ByteArrayOutputStream()
 )
 
 

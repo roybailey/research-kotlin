@@ -1,16 +1,16 @@
 package me.roybailey.research.kotlin.report
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import mu.KotlinLogging
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellType
+import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.lang.String.valueOf
 
 
 class ExcelReportVisitor(
         val reportName: String,
-        val writer: OutputStream = ByteOutputStream()
+        val writer: OutputStream = ByteArrayOutputStream()
 ) {
 
     private val log = KotlinLogging.logger {}
