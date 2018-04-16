@@ -22,13 +22,20 @@ object UserController {
     data class UserTemplate(
             val id: String? = null,
             val name: String? = null,
-            val email: String? = null
+            val email: String? = null,
+            val active: Boolean = true
     )
 
     fun createUser(req: Request, rsp: Response):String {
-        val newUser = mapper.readValue(req.body(),UserTemplate::class.java)
-        val savedUser = userDao.save(newUser.name!!, newUser.email!!)
-        return mapper.writeValueAsString(savedUser)
+        try {
+            val newUser = mapper.readValue(req.body(), UserTemplate::class.java)
+            val savedUser = userDao.save(newUser.name!!, newUser.email!!)
+            return mapper.writeValueAsString(savedUser)
+        } catch (err:Exception) {
+            err.printStackTrace()
+            rsp.status(500)
+            return ""
+        }
     }
 
     fun getUser(req: Request, rsp: Response):String {

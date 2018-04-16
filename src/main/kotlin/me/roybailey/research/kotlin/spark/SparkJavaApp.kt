@@ -8,7 +8,7 @@ import spark.Spark.exception
 
 fun main(args: Array<String>) {
 
-    port(7000)
+    port(7001)
     exception(Exception::class.java) { exception, request, response ->
         exception.printStackTrace()
     }

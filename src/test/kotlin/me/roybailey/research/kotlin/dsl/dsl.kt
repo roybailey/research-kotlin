@@ -8,104 +8,159 @@ import org.junit.Test
 // Data Model
 // ------------------------------------------------------------
 
-interface ImportStatement {
 
-    fun toQueryString(): String
+typealias QueryParams = Map<String, Any>
+typealias QueryStatement = (params: QueryParams) -> String
+
+
+data class SimpleQueryStatement(val query: String) {
+    fun toQueryString(params: QueryParams): String = query
 }
 
-data class SimpleQuery(val query: String) : ImportStatement {
-    override fun toQueryString(): String = query
+data class ApocJdbcLoad(val select: QueryStatement, val merge: QueryStatement) {
+    fun toQueryString(params: QueryParams): String = "CALL apoc.load.jdbc(DB_URL,\"${select(params)}\") yield row\n${merge(params)}"
 }
 
-data class JdbcLoad(val select: String, val merge: String) : ImportStatement {
-    override fun toQueryString(): String = "call load.jdbc('$select') yield row\n$merge"
+data class ApocJsonLoad(val uri: QueryStatement, val merge: QueryStatement) {
+    fun toQueryString(params: QueryParams): String = "call apoc.load.json('${uri(params)}') yield row\n${merge(params)}"
 }
 
-data class JsonLoad(val uri: String, val merge: String) : ImportStatement {
-    override fun toQueryString(): String = "call load.json('$uri') yield row\n$merge"
-}
-
-data class ImportQuery(
-        val deleteScript: List<ImportStatement>,
-        val importScript: List<ImportStatement>,
-        val enrichScript: List<ImportStatement>
+data class ImportQueryScript(
+        val deleteScript: List<QueryStatement>,
+        val importScript: List<QueryStatement>,
+        val enrichScript: List<QueryStatement>
 )
 
-data class ImportJob(val name: String, val steps: ImportQuery)
+data class ImportTask(val name: String, val steps: ImportQueryScript)
 
 
 // ------------------------------------------------------------
 // DSL Syntax Sugar
 // ------------------------------------------------------------
 
-fun importerJob(init: ImportJobContext.() -> Unit): ImportJob {
-    val context = ImportJobContext().apply(init)
+fun importerTask(init: ImportTaskContext.() -> Unit): ImportTask {
+    val context = ImportTaskContext().apply(init)
     return context.build()
 }
 
-class ImportJobContext {
+
+class ImportTaskContext {
 
     var name: String? = null
-    var query: ImportQuery = ImportQuery(emptyList(), emptyList(), emptyList())
+    var query: ImportQueryScript = ImportQueryScript(emptyList(), emptyList(), emptyList())
 
-    fun steps(init: ImportQueryContext.() -> Unit) {
-        val context = ImportQueryContext().apply(init)
+    fun steps(init: ImportQueryScriptContext.() -> Unit) {
+        val context = ImportQueryScriptContext().apply(init)
         query = context.build()
     }
 
-    fun build() = ImportJob(this.name!!, query)
+    fun build() = ImportTask(this.name!!, query)
 }
 
-class ImportQueryContext {
 
-    private val deleteScript = mutableListOf<ImportStatement>()
+class ImportQueryScriptContext {
 
-    private val importScript = mutableListOf<ImportStatement>()
+    private val deleteScript = mutableListOf<QueryStatement>()
 
-    private val enrichScript = mutableListOf<ImportStatement>()
+    private val importScript = mutableListOf<QueryStatement>()
 
-    fun delete(init: ImportStatementContext.() -> Unit) {
-        val context = ImportStatementContext().apply(init)
+    private val enrichScript = mutableListOf<QueryStatement>()
+
+    fun delete(init: QueryStatementContext.() -> Unit) {
+        val context = QueryStatementContext().apply(init)
         deleteScript.addAll(context.build())
     }
 
-    fun merge(init: ImportStatementContext.() -> Unit) {
-        val context = ImportStatementContext().apply(init)
+    fun merge(init: QueryStatementContext.() -> Unit) {
+        val context = QueryStatementContext().apply(init)
         importScript.addAll(context.build())
     }
 
-    fun enrich(init: ImportStatementContext.() -> Unit) {
-        val context = ImportStatementContext().apply(init)
+    fun enrich(init: QueryStatementContext.() -> Unit) {
+        val context = QueryStatementContext().apply(init)
         enrichScript.addAll(context.build())
     }
 
-    fun build(): ImportQuery = ImportQuery(deleteScript, importScript, enrichScript)
+    fun build(): ImportQueryScript = ImportQueryScript(deleteScript, importScript, enrichScript)
 }
 
-class ImportStatementContext {
 
-    var statement = mutableListOf<ImportStatement>()
+class QueryStatementContext {
 
-    private fun split(cypherScript: String) = cypherScript.split(Regex("//.*[\\n\\r]"))
+    var statement = mutableListOf<QueryStatement>()
 
-    fun cypher(cypherScript: String) {
-        split(cypherScript)
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .forEach {
-                    statement.add(SimpleQuery(it))
-                }
+    private fun splitSql(sqlScript: String) = sqlScript.split(Regex("--.*[\\n\\r]"))
+    private fun splitCypher(cypherScript: String) = cypherScript.split(Regex("//.*[\\n\\r]"))
+
+    fun QueryStatementContext.cypher(cypherScript: String) =
+            statement.addAll(splitCypher(cypherScript)
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
+                    .map { SimpleQueryStatement(it)::toQueryString }
+                    .toList())
+
+    fun QueryStatementContext.sql(sqlScript: String) =
+            statement.addAll(splitSql(sqlScript)
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
+                    .map { SimpleQueryStatement(it)::toQueryString }
+                    .toList())
+
+    fun jdbc(init: ApocJdbcLoadStatementContext.() -> Unit) {
+        val context = ApocJdbcLoadStatementContext().apply(init)
+        statement.add(context.build()::toQueryString)
     }
 
-    fun jdbc(select: String, merge: String) {
-        statement.add(JdbcLoad(select, merge))
-    }
+    fun jdbc(select: String, merge: String) =
+            jdbc {
+                select(select)
+                merge(merge)
+            }
 
-    fun json(uri: String, merge: String) {
-        statement.add(JsonLoad(uri, merge))
+    fun json(init: ApocJsonLoadStatementContext.() -> Unit) {
+        val context = ApocJsonLoadStatementContext().apply(init)
+        statement.add(context.build()::toQueryString)
     }
 
     fun build() = statement
+}
+
+
+class ApocJdbcLoadStatementContext {
+
+    var selectStatement: QueryStatement? = null
+    var mergeStatement: QueryStatement? = null
+
+
+    fun ApocJdbcLoadStatementContext.select(sql: String) {
+        selectStatement = SimpleQueryStatement(sql)::toQueryString
+    }
+
+    fun ApocJdbcLoadStatementContext.merge(cypher: String) {
+        mergeStatement = SimpleQueryStatement(cypher)::toQueryString
+    }
+
+
+    fun build() = ApocJdbcLoad(selectStatement!!, mergeStatement!!)
+}
+
+
+class ApocJsonLoadStatementContext {
+
+    var uriStatement: QueryStatement? = null
+    var mergeStatement: QueryStatement? = null
+
+
+    fun ApocJsonLoadStatementContext.uri(uri: String) {
+        uriStatement = SimpleQueryStatement(uri)::toQueryString
+    }
+
+    fun ApocJsonLoadStatementContext.merge(cypher: String) {
+        mergeStatement = SimpleQueryStatement(cypher)::toQueryString
+    }
+
+
+    fun build() = ApocJsonLoad(uriStatement!!, mergeStatement!!)
 }
 
 
@@ -113,12 +168,12 @@ class ImportStatementContext {
 // Test DSL
 // ------------------------------------------------------------
 
-class DslTest {
+class Dsl2Test {
 
     @Test
     fun `test importer dsl sample`() {
 
-        val actual = importerJob {
+        val actual = importerTask {
             name = "TestImport"
             steps {
                 delete {
@@ -126,7 +181,11 @@ class DslTest {
                     cypher("drop index on :Label(name)")
                 }
                 merge {
-                    jdbc("select * from table", "merge (n:Test {id: row.ID})")
+                    jdbc {
+                        select("select * from table")
+                        merge("merge (n:Test {id: row.ID})")
+                    }
+                    //jdbc("select * from table", "merge (n:Test {id: row.ID})")
                 }
                 enrich {
                     cypher("""
@@ -143,16 +202,18 @@ class DslTest {
             }
         }
 
+        val params = mapOf<String, Any>()
+
         assertThat(actual.name).isEqualTo("TestImport")
         assertThat(actual.steps.deleteScript).hasSize(2)
-        assertThat(actual.steps.deleteScript[0].toQueryString()).isEqualTo("match (n) delete n")
+        assertThat(actual.steps.deleteScript[0](params)).isEqualTo("match (n) delete n")
         assertThat(actual.steps.importScript).hasSize(1)
-        assertThat(actual.steps.importScript[0].toQueryString()).isEqualTo("""
-                call load.jdbc('select * from table') yield row
+        assertThat(actual.steps.importScript[0](params)).isEqualTo("""
+                CALL apoc.load.jdbc(DB_URL,"select * from table") yield row
                 merge (n:Test {id: row.ID})
                 """.trimIndent())
         assertThat(actual.steps.enrichScript).hasSize(3)
-        assertThat(actual.steps.enrichScript[0].toQueryString()).isEqualTo("match (n:Test {status: 'ACTIVE'}) set n:Active")
+        assertThat(actual.steps.enrichScript[0](params)).isEqualTo("match (n:Test {status: 'ACTIVE'}) set n:Active")
     }
 }
 

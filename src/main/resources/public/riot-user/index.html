@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Riot todo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/assets/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/assets/semantic-ui/2.2.13/semantic.min.js"></script>
+    <link rel="stylesheet" href="/assets/semantic-ui/2.2.13/semantic.min.css">
+
+    <script src="/assets/riot-3.9.1/riot-compiler.min.js"></script>
+
+    <script src="riot-store.js"></script>
+    <script src="user-store.js"></script>
+
+    <link rel="stylesheet" href="user.css">
+  </head>
+
+  <body>
+
+    <user></user>
+
+    <script src="user.tag" type="riot/tag"></script>
+
+    <script>
+    var userStore = new UserStore() // Create a store instance.
+    RiotControl.addStore(userStore) // Register the store in central dispatch.
+    riot.mount('user', {
+      title: 'Users In The System'
+    })
+    </script>
+
+  </body>
+
+</html>
