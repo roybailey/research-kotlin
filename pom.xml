@@ -15,7 +15,7 @@
         <kotlin-logging.version>1.4.7</kotlin-logging.version>
         <slf4j.version>1.7.2</slf4j.version>
 
-        <jackson.version>2.9.0</jackson.version>
+        <jackson.version>2.10.1</jackson.version>
         <sparkjava.version>2.7.1</sparkjava.version>
         <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
 
