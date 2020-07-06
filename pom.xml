@@ -15,16 +15,16 @@
         <kotlin-logging.version>1.4.7</kotlin-logging.version>
         <slf4j.version>1.7.2</slf4j.version>
 
-        <jackson.version>2.9.0</jackson.version>
-        <sparkjava.version>2.7.1</sparkjava.version>
+        <jackson.version>2.11.1</jackson.version>
+        <sparkjava.version>2.7.2</sparkjava.version>
         <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
 
-        <neo4j.version>3.3.1</neo4j.version>
-        <neo4j.apoc.version>3.3.0.1</neo4j.apoc.version>
+        <neo4j.version>3.4.18</neo4j.version>
+        <neo4j.apoc.version>3.4.0.4</neo4j.apoc.version>
         <h2.version>1.4.196</h2.version>
 
         <apache-csv.version>1.5</apache-csv.version>
-        <pdfbox.version>2.0.4</pdfbox.version>
+        <pdfbox.version>2.0.20</pdfbox.version>
         <pdfboxable.version>1.4</pdfboxable.version>
         <excel.version>3.17</excel.version>
 

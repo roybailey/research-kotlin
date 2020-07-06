@@ -14,7 +14,6 @@ import mu.KotlinLogging
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Result
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
-import org.neo4j.kernel.api.exceptions.KernelException
 import org.neo4j.kernel.configuration.BoltConnector
 import org.neo4j.kernel.impl.proc.Procedures
 import org.neo4j.kernel.internal.GraphDatabaseAPI
@@ -100,8 +99,8 @@ class Neo4jService {
                 try {
                     procedures.registerProcedure(proc)
                     procedures.registerFunction(proc)
-                } catch (e: KernelException) {
-                    throw RuntimeException("Error registering " + proc, e)
+                } catch (err: Exception) {
+                    throw RuntimeException("Error registering $proc", err)
                 }
             }
         }
