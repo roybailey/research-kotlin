@@ -114,7 +114,7 @@ class Neo4jService {
 
 
     fun execute(cypher: String, code: (result: Result) -> Unit) {
-        graphDb.beginTx().use { tx ->
+        graphDb.beginTx().also { tx ->
             code(graphDb.execute(cypher))
             tx.success()
         }
