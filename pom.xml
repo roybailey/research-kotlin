@@ -29,7 +29,7 @@
         <pdfboxable.version>1.4</pdfboxable.version>
         <excel.version>3.17</excel.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockk.version>1.4.2</mockk.version>
         <assertj.version>3.8.0</assertj.version>
     </properties>
