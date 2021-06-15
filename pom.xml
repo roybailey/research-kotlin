@@ -25,7 +25,7 @@
         <h2.version>1.4.196</h2.version>
 
         <apache-csv.version>1.5</apache-csv.version>
-        <pdfbox.version>2.0.20</pdfbox.version>
+        <pdfbox.version>2.0.24</pdfbox.version>
         <pdfboxable.version>1.4</pdfboxable.version>
         <excel.version>3.17</excel.version>
 
