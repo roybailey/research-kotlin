@@ -3,7 +3,8 @@ package me.roybailey.research.kotlin.report
 import com.google.common.net.MediaType
 import me.roybailey.research.kotlin.BaseServiceTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -12,9 +13,9 @@ import java.io.FileReader
 class ReportDefinitionTest : BaseServiceTest() {
 
     @Test
-    fun `Test Simple CSV File`() {
+    fun `Test Simple CSV File`(testInfo: TestInfo) {
 
-        val report = ReportDefinition(testName.methodName,
+        val report = ReportDefinition(testInfo.displayName,
                 QueryType.NEO4J,
                 """
                     CALL apoc.load.jdbc('jdbc:h2:mem:test;DB_CLOSE_DELAY=-1',"SELECT * FROM CSVREAD('${File("./src/test/resources/testdata/SampleCSVFile_2kb.csv").absolutePath}')") YIELD row
@@ -30,7 +31,7 @@ class ReportDefinitionTest : BaseServiceTest() {
                     row.DISCOUNT as DISCOUNT
                 """.trimIndent())
 
-        val reportName = testName.methodName
+        val reportName = testInfo.displayName
         val file = File("./target/" + reportName.replace(' ', '_') + ".csv")
 
         file.delete()
@@ -54,9 +55,9 @@ class ReportDefinitionTest : BaseServiceTest() {
 
 
     @Test
-    fun `Test Simple CSV File With Columns`() {
+    fun `Test Simple CSV File With Columns`(testInfo: TestInfo) {
 
-        val report = ReportDefinition(testName.methodName,
+        val report = ReportDefinition(testInfo.displayName,
                 queryType = QueryType.NEO4J,
                 query = """
                     CALL apoc.load.jdbc('jdbc:h2:mem:test;DB_CLOSE_DELAY=-1',"SELECT * FROM CSVREAD('${File("./src/test/resources/testdata/SampleCSVFile_2kb.csv").absolutePath}')") YIELD row
@@ -84,7 +85,7 @@ class ReportDefinitionTest : BaseServiceTest() {
                         )
         )
 
-        val reportName = testName.methodName
+        val reportName = testInfo.displayName
         val file = File("./target/" + reportName.replace(' ', '_') + ".csv")
 
         file.delete()

@@ -4,9 +4,8 @@ import me.roybailey.research.kotlin.report.QueryType
 import me.roybailey.research.kotlin.report.ReportDefinition
 import me.roybailey.research.kotlin.report.SimpleReportVisitor
 import mu.KotlinLogging
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 import java.io.File
 
 
@@ -14,12 +13,8 @@ class Neo4jJDBCImportTest {
 
     private val log = KotlinLogging.logger {}
 
-    @Rule
-    @JvmField
-    val testName = TestName()
-
     @Test
-    fun `Test Neo4j JDBC Load`() {
+    fun `Test Neo4j JDBC Load`(testInfo: TestInfo) {
 
         val neo4j = Neo4jService()
         val neo4jReportRunner = Neo4jReportRunner(neo4j)
@@ -38,10 +33,10 @@ class Neo4jJDBCImportTest {
                 row.QUANTITY as QUANTITY,
                 row.DISCOUNT as DISCOUNT
             """
-            val results = SimpleReportVisitor(testName.methodName)
+            val results = SimpleReportVisitor(testInfo.displayName)
             neo4jReportRunner.runReport(
-                    ReportDefinition(testName.methodName, QueryType.NEO4J, cypherQuery),
-                    results::reportVisit
+                ReportDefinition(testInfo.displayName, QueryType.NEO4J, cypherQuery),
+                results::reportVisit
             )
             println(results)
 

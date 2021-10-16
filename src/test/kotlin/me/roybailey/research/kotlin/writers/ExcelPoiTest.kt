@@ -1,7 +1,7 @@
 package me.roybailey.research.kotlin.writers
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.FileOutputStream
 import java.util.*
 

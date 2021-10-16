@@ -1,5 +1,5 @@
 import kotlinx.coroutines.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.system.measureTimeMillis
 
 

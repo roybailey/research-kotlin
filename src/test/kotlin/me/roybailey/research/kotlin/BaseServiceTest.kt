@@ -4,10 +4,8 @@ import me.roybailey.research.kotlin.neo4j.Neo4jReportRunner
 import me.roybailey.research.kotlin.neo4j.Neo4jService
 import me.roybailey.research.kotlin.report.ReportRunner
 import me.roybailey.research.kotlin.report.ReportService
-import org.junit.AfterClass
-import org.junit.BeforeClass
-import org.junit.Rule
-import org.junit.rules.TestName
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 
 
 open class BaseServiceTest {
@@ -25,7 +23,7 @@ open class BaseServiceTest {
         }
 
         @JvmStatic
-        @BeforeClass
+        @BeforeAll
         fun setupDatabase() {
             banner("SetupDatabase") {
                 neo4j = Neo4jService()
@@ -40,7 +38,7 @@ open class BaseServiceTest {
         }
 
         @JvmStatic
-        @AfterClass
+        @AfterAll
         fun shutdownDatabase() {
             banner("ShutdownDatabase") {
                 with(neo4j) {
@@ -52,9 +50,5 @@ open class BaseServiceTest {
         }
     }
 
-
-    @Rule
-    @JvmField
-    val testName = TestName()
 
 }

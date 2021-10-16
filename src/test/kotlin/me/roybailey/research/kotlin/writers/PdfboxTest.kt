@@ -4,7 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.PDPage
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import be.quodlibet.boxable.datatable.DataTable
 import be.quodlibet.boxable.BaseTable
 import com.google.common.io.Files

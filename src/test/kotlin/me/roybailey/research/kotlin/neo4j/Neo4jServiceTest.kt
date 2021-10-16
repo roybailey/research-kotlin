@@ -3,8 +3,9 @@ package me.roybailey.research.kotlin.neo4j
 import me.roybailey.research.kotlin.BaseServiceTest
 import me.roybailey.research.kotlin.report.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 import java.io.FileOutputStream
 
 
@@ -18,14 +19,14 @@ class Neo4jServiceTest : BaseServiceTest() {
     private var pipeline: CompositeReportVisitor = CompositeReportVisitor()
 
 
-    @Before
-    fun setupVisitors() {
-        txtReport = SimpleReportVisitor(testName.methodName)
-        csvReport = CsvReportVisitor(testName.methodName)
-        pdfReport = PdfReportVisitor(testName.methodName,
-                FileOutputStream(BASEPATH + testName.methodName.replace(' ', '_') + ".pdf"))
-        xlsReport = ExcelReportVisitor(testName.methodName,
-                FileOutputStream(BASEPATH + testName.methodName.replace(' ', '_') + ".xls"))
+    @BeforeEach
+    fun setupVisitors(testInfo:TestInfo) {
+        txtReport = SimpleReportVisitor(testInfo.displayName)
+        csvReport = CsvReportVisitor(testInfo.displayName)
+        pdfReport = PdfReportVisitor(testInfo.displayName,
+                FileOutputStream(BASEPATH + testInfo.displayName.replace(' ', '_') + ".pdf"))
+        xlsReport = ExcelReportVisitor(testInfo.displayName,
+                FileOutputStream(BASEPATH + testInfo.displayName.replace(' ', '_') + ".xls"))
         pipeline = CompositeReportVisitor(
                 txtReport::reportVisit,
                 csvReport::reportVisit,
@@ -36,11 +37,11 @@ class Neo4jServiceTest : BaseServiceTest() {
 
 
     @Test
-    fun `Test Neo4j Nodes`() {
+    fun `Test Neo4j Nodes`(testInfo: TestInfo) {
 
-        banner(testName.methodName) {
+        banner(testInfo.displayName) {
             neo4jReportRunner.runReport(
-                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
+                    ReportDefinition(testInfo.displayName, QueryType.NEO4J, """
                     match (m:Movie)-[:ACTED_IN]-(p:Person)
                     return m as Movie, collect(p.name) as Actors
                     order by Movie.title"""),
@@ -56,11 +57,11 @@ class Neo4jServiceTest : BaseServiceTest() {
 
 
     @Test
-    fun `Test Neo4j Node Properties`() {
+    fun `Test Neo4j Node Properties`(testInfo: TestInfo) {
 
-        banner(testName.methodName) {
+        banner(testInfo.displayName) {
             neo4jReportRunner.runReport(
-                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
+                    ReportDefinition(testInfo.displayName, QueryType.NEO4J, """
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
                         return m {.title, .released}, collect(p {.name}) as Actors
                         order by m.title"""),
@@ -76,11 +77,11 @@ class Neo4jServiceTest : BaseServiceTest() {
 
 
     @Test
-    fun `Test Neo4j ResultSet`() {
+    fun `Test Neo4j ResultSet`(testInfo: TestInfo) {
 
-        banner(testName.methodName) {
+        banner(testInfo.displayName) {
             neo4jReportRunner.runReport(
-                    ReportDefinition(testName.methodName, QueryType.NEO4J, """
+                    ReportDefinition(testInfo.displayName, QueryType.NEO4J, """
                         match (m:Movie)-[:ACTED_IN]-(p:Person)
                         return m.title, m.released, collect(p.name) as Actors
                         order by m.title"""),

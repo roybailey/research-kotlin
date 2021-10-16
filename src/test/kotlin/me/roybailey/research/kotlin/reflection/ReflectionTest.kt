@@ -2,7 +2,7 @@ package me.roybailey.research.kotlin.reflection
 
 import org.assertj.core.api.Assertions.assertThat
 import org.bouncycastle.asn1.x500.style.RFC4519Style.street
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.Instant.now
 import kotlin.reflect.full.functions

@@ -3,23 +3,18 @@ package me.roybailey.research.kotlin.writers
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInfo
 import java.nio.file.Files
 import java.nio.file.Paths
 
 
 class CsvTest {
 
-    @Rule
-    @JvmField
-    val testName = TestName()
-
     @Test
-    fun `Test Apache CSV`() {
+    fun `Test Apache CSV`(testInfo: TestInfo) {
 
-        val filepath = Paths.get("./target/", testName.methodName.replace(' ','_')+".csv")
+        val filepath = Paths.get("./target/", testInfo.displayName.replace(' ','_')+".csv")
 
         Files.newBufferedWriter(filepath).use({ writer ->
             CSVPrinter(writer, CSVFormat.RFC4180
