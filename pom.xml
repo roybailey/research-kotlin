@@ -40,11 +40,13 @@
         <h2.version>1.4.196</h2.version>
 
         <apache-csv.version>1.5</apache-csv.version>
+        <apache-commons-lang3.version>3.12.0</apache-commons-lang3.version>
         <pdfbox.version>2.0.20</pdfbox.version>
         <pdfboxable.version>1.4</pdfboxable.version>
         <excel.version>3.17</excel.version>
         <guava.version>31.0.1-jre</guava.version>
 
+        <jsoup.version>1.14.3</jsoup.version>
     </properties>
 
     <dependencies>
@@ -172,11 +174,21 @@
             <artifactId>poi</artifactId>
             <version>${excel.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache-commons-lang3.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
         </dependency>
 
     </dependencies>
