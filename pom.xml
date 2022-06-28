@@ -43,7 +43,7 @@
         <apache-commons-lang3.version>3.12.0</apache-commons-lang3.version>
         <pdfbox.version>2.0.20</pdfbox.version>
         <pdfboxable.version>1.4</pdfboxable.version>
-        <excel.version>3.17</excel.version>
+        <excel.version>4.1.1</excel.version>
         <guava.version>31.0.1-jre</guava.version>
 
         <jsoup.version>1.14.3</jsoup.version>
