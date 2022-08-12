@@ -91,4 +91,45 @@ class JsoupTest {
             ++page
         } while (response.statusCode() == 200 && page <= 10)
     }
+
+    data class Salary(
+        val takehome: String
+    )
+
+    @Test
+    fun testJsoupSalary() {
+        var salary = 50000
+        var maxSalary = 50000
+        do {
+            val url = "https://www.thesalarycalculator.co.uk/salary.php"
+            val response = Jsoup.connect(url)
+                .timeout(30000)
+                .method(Connection.Method.GET)
+                .execute()
+
+            val sessionCookies: Map<String, String> = response.cookies()
+            val document = response.parse()
+            val searchForm = document.getElementsByAttributeValue("action", "salary.php").first() as FormElement
+
+            val searchInput = searchForm.getElementsByAttributeValue("name", "salary").first() as Element
+            searchInput.text("$salary")
+
+            val searchResponse = searchForm.submit()
+                .timeout(30000)
+                .header("Accept","text/html")
+                .header("Content-Type","application/x-www-form-urlencoded")
+                .cookies(sessionCookies)
+                .method(Connection.Method.POST)
+                .execute()
+            val searchResults = searchResponse.parse()
+            for (element in searchResults.select("table.results > tr")) {
+                println("----------")
+                println(element.text())
+            }
+            println("----------")
+            salary += 10000
+        } while (response.statusCode() == 200 && salary <= maxSalary)
+    }
+
+
 }

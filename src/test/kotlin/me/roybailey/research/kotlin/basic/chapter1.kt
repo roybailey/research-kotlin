@@ -21,6 +21,11 @@ enum class RGB(val red: Int, val green: Int, val blue: Int) {
 
 fun main(args: Array<String>) {
 
+    val text:String? = null
+
+    if (text.isNullOrEmpty())
+        println("it didn't blow up!!!!")
+
     // shows code within string...
     println("Hello, ${if (args.isNotEmpty()) args[0] else "World"}!")
 

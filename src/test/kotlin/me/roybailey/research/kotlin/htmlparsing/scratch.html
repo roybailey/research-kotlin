@@ -1,0 +1,815 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+          content="Salary Calculator, takehome, take home, take-home, tax calculator, income tax calculator, 2022 tax calculator, annual, monthly, weekly, daily, pay, job, money, jobs, earnings, mortgage, repayment, mortgage repayments, repayments, salary, calculator, wage, wages, hourly wage, income, tax, income tax, national insurance, NI, Student Loan, student, loan, gross, net, cash, expenditure, dosh, moolah, pound, pounds, GBP, sterling, hourly salary calculator, monthly salary calculator, annual to monthly, annual to weekly, annual to hourly, hourly to annual, hourly to monthly, hourly to weekly, monthly to annual, monthly to weekly, monthly to hourly, take home pay calculator, take home salary calculator, take home salary, take home pay calculator, take home salary calculator, hourly rate calculator, mortgage repayment calculator, mortgage monthly, monthly mortgage repayment, mortgage rate change, mortgage rate calculator, budget, April, 2022, April 2022 budget, April 2022, 2022 budget, April 2022 rates, 2022 income tax, 2022 PAYE, PAYE, PAYE calculator, 22-23 tax rates, 2022-2023 income tax, bonus, bonuses">
+    <meta name="description"
+          content="The Salary Calculator tells you monthly take-home, or annual earnings, considering UK Tax, National Insurance and Student Loan. The latest budget information from April 2022 is used to show you exactly what you need to know. Hourly rates, weekly pay and bonuses are also catered for. Why not find your dream salary, too?">
+    <meta property="og:title" content="The Salary Calculator - Take-Home tax calculator">
+    <meta name="robots" content="index,follow">
+    <meta property="og:image" content="https://www.thesalarycalculator.co.uk/assets/images/fbimage.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.thesalarycalculator.co.uk/salary.php">
+    <meta property="og:title" content="The Salary Calculator - Take-Home tax calculator">
+    <meta property="og:description"
+          content="The Salary Calculator tells you monthly take-home, or annual earnings, considering UK Tax, National Insurance and Student Loan. The latest budget information from April 2022 is used to show you exactly what you need to know. Hourly rates, weekly pay and bonuses are also catered for. Why not find your dream salary, too?">
+    <title>The Salary Calculator - Take-Home tax calculator</title>
+    <link rel="canonical" href="https://www.thesalarycalculator.co.uk/salary.php">
+    <link rel="SHORTCUT ICON" href="./assets/images/favicon.ico">
+    <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.1652953478.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/print.css" rel="stylesheet" type="text/css" media="print">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600" rel="stylesheet">
+    <script async type="text/javascript" src="//s.clickiocdn.com/t/consent_213476.js"></script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-3292951-1']);
+        _gaq.push(['_gat._anonymizeIp']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+    <script async src="./assets/js/js-cookie.js"></script>
+    <script type="text/javascript">
+        (function () {
+            var c = setInterval(function () {
+                var m = document.getElementsByClassName('menu__list');
+                if (m.length) {
+                    clearInterval(c);
+                    var i, e = m[0].getElementsByClassName('menu__list-item');
+                    for (i = 0; i < e.length; i++) {
+                        if (!e[i].classList.contains('menu__list-item--active') && !e[i].classList.contains('menu__list-item--logo')) {
+                            e[i].style.left = m[0].getElementsByClassName('menu__list-item--active')[0].offsetWidth + 'px';
+                        }
+                    }
+                }
+            }, 99);
+        })();
+
+        function updateAges() {
+            var ageArray = [];
+            var i = 2005;
+            ageArray[i] = new Array(2005, "2005/6", "Under 65", "65 - 74", "75 plus")
+            var i = 2006;
+            ageArray[i] = new Array(2006, "2006/7", "Under 65", "65 - 74", "75 plus")
+            var i = 2007;
+            ageArray[i] = new Array(2007, "2007/8", "Under 65", "65 - 74", "75 plus")
+            var i = 2008;
+            ageArray[i] = new Array(2008, "2008/9", "Under 65", "65 - 74", "75 plus")
+            var i = 2009;
+            ageArray[i] = new Array(2009, "2009/10", "Under 65", "65 - 74", "75 plus")
+            var i = 2010;
+            ageArray[i] = new Array(2010, "2010/11", "Under 65", "65 - 74", "75 plus")
+            var i = 2011;
+            ageArray[i] = new Array(2011, "2011/12", "Under 65", "65 - 74", "75 plus")
+            var i = 2012;
+            ageArray[i] = new Array(2012, "2012/13", "Under 65", "65 - 74", "75 plus")
+            var i = 2013;
+            ageArray[i] = new Array(2013, "2013/14", "Under 65", "65 - 74", "75 plus")
+            var i = 2014;
+            ageArray[i] = new Array(2014, "2014/15", "Under 66", "66 - 75", "76 plus")
+            var i = 2015;
+            ageArray[i] = new Array(2015, "2015/16", "Under 67", "67 - 76", "77 plus")
+            var i = 2016;
+            ageArray[i] = new Array(2016, "2016/17", "Under 68", "68 - 77", "78 plus")
+            var i = 2017;
+            ageArray[i] = new Array(2017, "2017/18", "Under 69", "69 - 78", "79 plus")
+            var i = 2018;
+            ageArray[i] = new Array(2018, "2018/19", "Under 70", "70 - 79", "80 plus")
+            var i = 2019;
+            ageArray[i] = new Array(2019, "2019/20", "Under 71", "71 - 80", "81 plus")
+            var i = 2020;
+            ageArray[i] = new Array(2020, "2020/21", "Under 72", "72 - 81", "82 plus")
+            var i = 2021;
+            ageArray[i] = new Array(2021, "2021/22", "Under 73", "73 - 82", "83 plus")
+            var i = 2022;
+            ageArray[i] = new Array(2022, "2022/23", "Under 74", "74 - 83", "84 plus")
+            var taxYear = document.getElementById("chosenTaxYear").value;
+            document.getElementById("agelow").innerHTML = ageArray[taxYear][2];
+            document.getElementById("agemid").innerHTML = ageArray[taxYear][3];
+            document.getElementById("agehigh").innerHTML = ageArray[taxYear][4];
+
+        }
+
+        var previousValue = document.querySelector('input[name="pensiontype"]:checked').value;
+
+        function pensionchecks() {
+            var AutoEnrolment = document.getElementById("autoenrolment");
+            var Employer = document.getElementById("employer");
+            if (document.getElementById("chosenTaxYear")) {
+                var ChosenTaxYear = document.getElementById("chosenTaxYear").value;
+            } else {
+                var ChosenTaxYear = 2022;
+            }
+            if (AutoEnrolment.checked == true) {
+                document.getElementById("pensioninclusions").style.display = "none";
+                document.getElementById("pensioncontract").style.display = "none";
+            } else if (previousValue = "autoenrolment") {
+                document.getElementById("pensioninclusions").style.display = "block";
+            }
+            if (Employer.checked == true && ChosenTaxYear == 2015) {
+                document.getElementById("pensioncontract").style.display = "block";
+            } else if (previousValue = "employer") {
+                document.getElementById("pensioncontract").style.display = "none";
+            }
+            previousValue = document.querySelector('input[name="pensiontype"]:checked').value;
+        }
+    </script>
+    <script async type="text/javascript" src="//s.clickiocdn.com/t/213476/360_light.js"></script>
+</head>
+<body>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<div class="nav-wrap">
+    <nav class="menu dark">
+        <ul class="menu__list">
+            <li class="menu__list-item menu__list-item--logo"><a class="menu__link" href="."> <img class="menu__logo"
+                                                                                                   src="assets/images/dark-logo.png"
+                                                                                                   alt="The Salary Calculator">
+            </a></li>
+            <li class="menu__list-item home-link"><a class="menu__link" href=".">Home</a></li>
+            <li class="menu__list-item menu__list-item--active"><a class="menu__link  menu__link--active"
+                                                                   href="salary.php">Take Home Pay</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="hourly.php">Hourly Wage</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="sickpay.php">Maternity / Sick Pay</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="lifestyle.php">Required Salary</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="twosalaries.php">Two Jobs</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="prorata.php">Pro-rata / Furlough</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="compare.php">Compare Years</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="salaries.php">Compare Two Salaries</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="mortgages.php">Mortgages</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="debt.php">Debts</a></li> <!--<li class="menu__list-item">
+                        <a class="menu__link" href="election.php">Election</a>
+                    </li> -->
+            <li class="menu__list-item"><a class="menu__link" href="http://blog.thesalarycalculator.co.uk">Blog</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="about.php">About</a></li>
+            <li class="menu__list-item"><a class="menu__link" href="links.php">Links</a></li>
+        </ul>
+    </nav>
+</div>
+<section class="main-content">
+    <div class="wrap content">
+        <div id="stickyad" class="advert advert--portrait">
+            <script class="__lxGc__" type="text/javascript">
+                (window.__lxGc__ = window.__lxGc__ || {'s': {}, 'b': 0}).cmd = window.__lxGc__.cmd || [];
+
+                function __lx_callstatpixel() {
+                    var parent = document.getElementsByTagName('script').item(0).parentNode;
+                    var img_pixel = document.createElement('img');
+                    var url_pixel = '//clickiocdn.com/utr/noadreq/?rnd=' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                    img_pixel.setAttribute('src', url_pixel);
+                    img_pixel.setAttribute('width', '1px');
+                    img_pixel.setAttribute('height', '1px');
+                    parent.appendChild(img_pixel);
+                }
+
+                if (window.innerWidth <= 1365) {
+                    __lx_callstatpixel();
+                }
+                if ((window.innerWidth >= 1366) && (window.innerWidth <= 1575)) {
+                    __lxGc__.cmd.push(function () {
+                        __lxGc__.display('clickio_sticky_ad_unit', '_213476', '_677401');
+                    });
+                }
+                if (window.innerWidth >= 1576) {
+                    __lxGc__.cmd.push(function () {
+                        __lxGc__.display('clickio_sticky_ad_unit', '_213476', '_677403');
+                    });
+                }
+            </script>
+            <div id="clickio_sticky_ad_unit"></div>
+        </div>
+        <h1>Take Home Tax Calculator</h1>
+        <p class="intro mobile-hide">Wondering how much difference that pay rise would make? The April 2022 values have
+            now been made available to show you the most up-to-date information. Use the Take-Home Salary Calculator to
+            work out just how much more you will have each month.</p>
+        <h2 class="underline mobile-hide">Your Details</h2>
+        <div id="topleaderboardad" class="advert advert--landscape">
+            <script class="__lxGc__" type="text/javascript">
+                ((__lxGc__ = window.__lxGc__ || {
+                    's': {},
+                    'b': 0
+                })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_679614'] = {'i': __lxGc__.b++};
+            </script>
+            <script class="__lxGc__" type="text/javascript">
+                ((__lxGc__ = window.__lxGc__ || {
+                    's': {},
+                    'b': 0
+                })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_679612'] = {'i': __lxGc__.b++};
+            </script>
+        </div>
+        <form action="salary.php" method="post">
+            <h2 class="hero"> I want to see the breakdown for a salary of <span class="nowrap">£ <input
+                    class="hero__input" type="number" step="any" min="0.01" name="salary" value=""></span> <input
+                    type="submit" name="submit" class="button button--hero dark mobile-only" value="Calculate!"></h2>
+            <h3 class="mobile-only more-options">More options...</h3>
+            <div class="additional-info">
+                <div class="divider"><label class="checkbox"> <input id="check1" type="checkbox" name="scottish"
+                                                                     value="1"> <span></span> Resident in Scotland?
+                </label> <a class="tooltip" href="#scotland-modal"> <span>?</span> </a>
+                </div>
+            </div>
+            <div class="worko-tabs">
+                <input class="state" type="radio" title="tab-one" name="tabs-state" id="tab-one" checked
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-two" name="tabs-state" id="tab-two"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-three" name="tabs-state" id="tab-three"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-four" name="tabs-state" id="tab-four"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-five" name="tabs-state" id="tab-five"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-six" name="tabs-state" id="tab-six"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-seven" name="tabs-state" id="tab-seven"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-eight" name="tabs-state" id="tab-eight"
+                       onclick="Cookies.set('activetab', this.id);">
+                <input class="state" type="radio" title="tab-nine" name="tabs-state" id="tab-nine"
+                       onclick="Cookies.set('activetab', this.id);">
+                <div class="tabs flex-tabs main-tabs"><label for="tab-one" id="tab-one-label" class="tab">Tax
+                    Code</label> <label for="tab-two" id="tab-two-label" class="tab">Student Loan</label> <label
+                        for="tab-three" id="tab-three-label" class="tab">Pension</label> <label for="tab-four"
+                                                                                                id="tab-four-label"
+                                                                                                class="tab">Bonus</label>
+                    <label for="tab-five" id="tab-five-label" class="tab">Overtime</label> <label for="tab-six"
+                                                                                                  id="tab-six-label"
+                                                                                                  class="tab">Childcare</label>
+                    <label for="tab-seven" id="tab-seven-label" class="tab">Salary Sacrifice</label> <label
+                            for="tab-eight" id="tab-eight-label" class="tab">Taxable Benefits</label> <label
+                            for="tab-nine" id="tab-nine-label" class="tab">Additional Options</label>
+                    <div id="tab-one-panel" class="panel active">
+                        <div class="divider">
+                            <p>If you know your tax code, please enter it here.</p> <a class="tooltip no-top-margin"
+                                                                                       href="#taxcode-modal">
+                            <span>?</span> </a>
+                        </div>
+                        <input type="text" name="taxcode" id="taxcode" value="" placeholder="e.g. 1257L">
+                    </div>
+                    <div id="tab-two-panel" class="panel">
+                        <div class="divider">
+                            <p>If you're still repaying your Student Loan, please select the repayment option that
+                                applies to you.</p> <a class="tooltip no-top-margin" href="#student-modal">
+                            <span>?</span> </a>
+                        </div>
+                        <label class="checkbox"><input type="checkbox" name="plan1" value="1"><span></span>Repayment
+                            Plan 1</label>
+                        <br> <label class="checkbox"><input type="checkbox" name="plan2" value="1"><span></span>Repayment
+                        Plan 2</label>
+                        <br> <label class="checkbox"><input type="checkbox" name="plan4" value="1"><span></span>Repayment
+                        Plan 4 (Scotland)</label>
+                        <br> <label class="checkbox"><input type="checkbox" name="postgraduate" value="1"><span></span>Postgraduate
+                        Loan</label>
+                    </div>
+                    <div id="tab-three-panel" class="panel">
+                        <div class="divider">
+                            <p>Do you contribute to a pension?</p> <a class="tooltip no-top-margin"
+                                                                      href="#pension-modal"> <span>?</span> </a>
+                        </div>
+                        <div class="worko-tabs pensioninput">
+                            <input class="state" type="radio" title="tab-one" name="mini-tabs-state" id="mini-tab-one"
+                                   checked onclick="Cookies.set('minitab', this.id);">
+                            <input class="state" type="radio" title="tab-two" name="mini-tabs-state" id="mini-tab-two"
+                                   onclick="Cookies.set('minitab', this.id);">
+                            <div class="tabs flex-tabs"><label for="mini-tab-one" id="mini-tab-one-label" class="tab">Percentage</label>
+                                <label for="mini-tab-two" id="mini-tab-two-label" class="tab">£ Amount</label>
+                                <div id="mini-tab-one-panel" class="panel active"><label>I contribute <input
+                                        type="number" step="any" class="hero__input hero--smaller__input" name="pension"
+                                        value="">%</label>
+                                    <br>
+                                    <div id="pensioninclusions" style="display:none;"><label class="dropdown"> of my
+                                        <select name="pensionearningstype" id="pensionearningstype">
+                                            <option value="grosssalary" selected>Gross Salary</option>
+                                            <option value="qualifyingearnings">Qualifying Earnings</option>
+                                        </select> </label>
+                                        <br> <label class="checkbox" id="pensionovertimelabel"><input
+                                                id="pensionovertimecheck" type="checkbox" name="pensionovertime"
+                                                value="1"><span></span>Include overtime</label>
+                                        <br> <label class="checkbox" id="pensionbonuslabel"><input
+                                                id="pensionbonuscheck" type="checkbox" name="pensionbonus"
+                                                value="1"><span></span>Include bonus</label>
+                                        <br> <label class="checkbox" id="pensionallowancelabel"><input
+                                                id="pensionallowancecheck" type="checkbox" name="pensionallowance"
+                                                value="1"><span></span>Include cash allowances</label>
+                                        <br>
+                                    </div>
+                                    <div id="pensioncontract" style="display:none;"><label class="checkbox"
+                                                                                           id="contractlabel"><input
+                                            id="contractcheck" type="checkbox" name="contract" value="1"
+                                            checked><span></span>Contracted out</label>
+                                    </div>
+                                </div>
+                                <div id="mini-tab-two-panel" class="panel"><label>I contribute £<input type="number"
+                                                                                                       step="any"
+                                                                                                       class="hero__input hero--smaller__input"
+                                                                                                       name="abspension"
+                                                                                                       value=""></label>
+                                    <label class="dropdown"> every <select name="absperiod">
+                                        <option value="1">Year</option>
+                                        <option value="12" selected>Month</option>
+                                        <option value="13">Four-weeks</option>
+                                        <option value="26">Two-weeks</option>
+                                        <option value="52">Week</option>
+                                    </select> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pensionradio"><label class="radio" id="pensionauto"
+                                                         title="Auto-enrolment employer's pension scheme"><input
+                                type="radio" name="pensiontype" value="autoenrolment" id="autoenrolment"
+                                onclick="pensionchecks()" checked><span></span>Auto-enrolment</label>
+                            <br> <label class="radio" id="pensionemployer"
+                                        title="Occupational or employer's pension scheme"><input type="radio"
+                                                                                                 name="pensiontype"
+                                                                                                 value="employer"
+                                                                                                 id="employer"
+                                                                                                 onclick="pensionchecks()"><span></span>Employer</label>
+                            <br> <label class="radio" id="pensionsacrifice"
+                                        title="Salary sacrifice pension scheme where your salary is contractually reduced"><input
+                                    type="radio" name="pensiontype" value="sacrifice" id="pensionsacrifice"
+                                    onclick="pensionchecks()"><span></span>Salary sacrifice</label>
+                            <br> <label class="radio" id="pensionpersonal"
+                                        title="A personal or stakeholder pension scheme"><input type="radio"
+                                                                                                name="pensiontype"
+                                                                                                value="personal"
+                                                                                                id="personal"
+                                                                                                onclick="pensionchecks()"><span></span>Personal</label>
+                        </div>
+                        <div class="divider">
+                        </div>
+                    </div>
+                    <div id="tab-four-panel" class="panel">
+                        <div class="divider">
+                            <p>Are you receiving a one-off bonus?</p> <a class="tooltip no-top-margin"
+                                                                         href="#bonus-modal"> <span>?</span> </a>
+                        </div>
+                        <label>I get an annual bonus of £<input type="number" step="any" name="bonus"
+                                                                class="hero__input hero--smaller__input"
+                                                                value=""><br></label> <label class="dropdown"> My normal
+                        pay period is <select name="payperiod">
+                            <option value="12" selected>Monthly</option>
+                            <option value="13">Four-weekly</option>
+                            <option value="26">Two-weekly</option>
+                            <option value="52">Weekly</option>
+                        </select> </label>
+                    </div>
+                    <div id="tab-five-panel" class="panel">
+                        <p>How many hours of paid overtime do you do each month?</p> I do
+                        <input type="number" class="hero__input hero--smaller__input" step="any" name="otime1" value="">
+                        hours at
+                        <input type="number" class="hero__input hero--smaller__input" step="any" name="orate1"
+                               value="1.5"> times my normal hourly rate
+                        <br> I do
+                        <input type="number" class="hero__input hero--smaller__input" step="any" name="otime2" value="">
+                        hours at
+                        <input type="number" class="hero__input hero--smaller__input" step="any" name="orate2"
+                               value="2"> times my normal hourly rate
+                        <br> The normal working week is
+                        <input type="number" class="hero__input hero--smaller__input" step="any" name="hours"
+                               value="37.5"> hours
+                        <br>
+                    </div>
+                    <div id="tab-six-panel" class="panel">
+                        <div class="divider">
+                            <p>What value of childcare vouchers do you receive from your employer?</p> <a
+                                class="tooltip no-top-margin" href="#childcare-modal"> <span>?</span> </a>
+                        </div>
+                        <label>I receive £<input type="number" step="any" name="childcare"
+                                                 class="hero__input hero--smaller__input" value=""> of vouchers each
+                            month</label>
+                        <br> <label class="checkbox"><input type="checkbox" name="existingscheme"
+                                                            value="1"><span></span>I joined the scheme before 6th April
+                        2011.</label>
+                    </div>
+                    <div id="tab-seven-panel" class="panel">
+                        <div class="divider">
+                            <p>Do you have any salary sacrifice arrangements (excluding your pension if you entered it
+                                on the "Pension" tab)?</p> <a class="tooltip no-top-margin" href="#sacrifice-modal">
+                            <span>?</span> </a>
+                        </div>
+                        <label>I sacrifice £<input type="number" step="any" name="NIsacrifice"
+                                                   class="hero__input hero--smaller__input" value=""> NI only, of my
+                            salary every</label> <label class="dropdown"> <select name="NIsacrificeperiod">
+                        <option value="1">Year</option>
+                        <option value="12" selected>Month</option>
+                        <option value="52">Week</option>
+                    </select> </label>
+                        <br> <label>I sacrifice £<input type="number" step="any" name="sacrifice"
+                                                        class="hero__input hero--smaller__input" value=""> tax exempt,
+                        of my salary every</label> <label class="dropdown"> <select name="sacrificeperiod">
+                        <option value="1">Year</option>
+                        <option value="12" selected>Month</option>
+                        <option value="52">Week</option>
+                    </select> </label>
+                    </div>
+                    <div id="tab-eight-panel" class="panel">
+                        <div class="divider">
+                            <p>Do you receive any taxable benefits?</p> <a class="tooltip no-top-margin"
+                                                                           href="#benefits-modal"> <span>?</span> </a>
+                        </div>
+                        <label>I receive £<input type="number" step="any" name="taxablebenefits"
+                                                 class="hero__input hero--smaller__input" value=""> in taxable benefits</label>
+                        <label class="dropdown"> every <select name="benefitperiod">
+                            <option value="1">Year</option>
+                            <option value="12" selected>Month</option>
+                            <option value="52">Week</option>
+                        </select> </label>
+                        <br> <label>I receive £<input type="number" step="any" name="cashbenefits"
+                                                      class="hero__input hero--smaller__input" value=""> in cash
+                        allowances</label> <label class="dropdown"> every <select name="cashbenefitperiod">
+                        <option value="1">Year</option>
+                        <option value="12" selected>Month</option>
+                        <option value="52">Week</option>
+                    </select> </label>
+                    </div>
+                    <div id="tab-nine-panel" class="panel">
+                        <div class="divider"><a class="tooltip" href="#checkbox-modal"> <span>?</span> </a> <label
+                                class="checkbox"><input type="checkbox" name="NIcheck" value="1"><span></span>I do not
+                            pay National Insurance</label>
+                            <br> <label class="checkbox"><input type="checkbox" name="blind" value="1"><span></span>I am
+                                eligible for the Blind Person's Allowance</label>
+                            <br> <label class="checkbox"><input type="checkbox" name="married" value="1"><span></span>I
+                                am married and one of us was born before 6th April 1935</label>
+                            <br> <label class="checkbox"><input type="checkbox" name="employersNI"
+                                                                value="1"><span></span>Show my Employer's NI
+                                contributions</label>
+                            <br>
+                            <br>
+                        </div>
+                        <div class="divider"><a class="tooltip" href="#days-weeks-modal"> <span>?</span> </a> <label
+                                class="dropdown"> I work <select name="daysinweek" id="daysinweek"
+                                                                 onchange="updateTimeperiods();">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select> </label> days per week
+                        </div>
+                        <div class="divider"><label class="dropdown"> There are <select name="weeks" id="weeks">
+                            <option value="52" selected>52</option>
+                            <option value="52.14">52.14</option>
+                        </select> </label> weeks in a year
+                        </div>
+                        <h4>Other Deductions?</h4>
+                        <div class="divider"><a class="tooltip no-top-margin" href="#deductions-modal"> <span>?</span>
+                        </a>
+                            <p>Do you have any other deductions, either before tax (like Gift Aid) or after tax?</p>
+                        </div>
+                        <label>I give £<input type="number" step="any" name="pretax"
+                                              class="hero__input hero--smaller__input" value=""> each month before
+                            tax</label>
+                        <br> <label>I give £<input type="number" step="any" name="posttax"
+                                                   class="hero__input hero--smaller__input" value=""> each month after
+                        tax</label>
+                        <br>
+                        <br>
+                        <div class="divider">
+                            <h4 class="additional-info__headline additional-info__headline--no-margin">Age:</h4> <a
+                                class="tooltip" href="#age-modal"> <span>?</span> </a> <label class="radio"> <input
+                                id="radio1" type="radio" name="age" value="low" checked> <span></span> <span
+                                id="agelow">Under 74</span> </label> <label class="radio"> <input id="radio2"
+                                                                                                  type="radio"
+                                                                                                  name="age"
+                                                                                                  value="mid">
+                            <span></span> <span id="agemid">74 - 83</span> </label> <label class="radio"> <input
+                                id="radio3" type="radio" name="age" value="high"> <span></span> <span id="agehigh">84 plus</span>
+                        </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"><label class="checkbox"> <input type="checkbox" name="timeperiods[]" value="1"
+                                                                 id="yearly" checked> <span></span> Yearly </label>
+                <label class="checkbox"> <input type="checkbox" name="timeperiods[]" value="12" id="monthly" checked>
+                    <span></span> Monthly </label> <label class="checkbox"> <input type="checkbox" name="timeperiods[]"
+                                                                                   value="13" id="4weekly">
+                    <span></span> 4 Weekly </label> <label class="checkbox"> <input type="checkbox" name="timeperiods[]"
+                                                                                    value="26" id="2weekly">
+                    <span></span> 2 Weekly </label> <label class="checkbox"> <input type="checkbox" name="timeperiods[]"
+                                                                                    value="52" id="weekly" checked>
+                    <span></span> Weekly </label> <label class="checkbox"> <input type="checkbox" name="timeperiods[]"
+                                                                                  value="daily" id="daily" checked>
+                    <span></span> Daily </label>
+            </div>
+            <div class="divider">
+                <h3 class="additional-info__headline additional-info__headline--no-margin">Tax Year</h3> <label
+                    class="dropdown"> <select id="chosenTaxYear" name="chosenTaxYear"
+                                              onchange="updateAges(); pensionchecks();">
+                <option value="2018">2018 / 19</option>
+                <option value="2019">2019 / 20</option>
+                <option value="2020">2020 / 21</option>
+                <option value="2021">2021 / 22</option>
+                <option value="2022" selected>2022 / 23</option>
+            </select> </label>
+                <input type="submit" name="submit" class="button button--hero dark" value="Calculate!">
+            </div>
+        </form>
+        <div class="advert advert--landscape disappear">
+            <script async type="text/javascript" src="//s.clickiocdn.com/t/213476/360_light.js"></script>
+            <script class="__lxGc__" type="text/javascript">
+                ((__lxGc__ = window.__lxGc__ || {
+                    's': {},
+                    'b': 0
+                })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_683363'] = {'i': __lxGc__.b++};
+            </script>
+        </div>
+        <div class="squaread">
+            <script async type="text/javascript" src="//s.clickiocdn.com/t/213476/360_light.js"></script>
+            <script class="__lxGc__" type="text/javascript">
+                ((__lxGc__ = window.__lxGc__ || {
+                    's': {},
+                    'b': 0
+                })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_695854'] = {'i': __lxGc__.b++};
+            </script>
+        </div>
+        <h2>How to use the Take-Home Calculator</h2>
+        <p>To use the tax calculator, enter your annual salary (or the one you would like) in the salary box above</p>
+        <p>If you are earning a bonus payment one month, enter the £ value of the bonus into the bonus box for a
+            side-by-side comparison of a normal month and a bonus month.</p>
+        <p>Find out the benefit of that overtime! Enter the number of hours, and the rate at which you will get paid.
+            For example, for 5 hours a month at time and a half, enter <b>5</b> @ <b>1.5</b>. There are two options in
+            case you have two different overtime rates. To make sure the calculations are as accurate as possible, enter
+            the number of non-overtime hours in the week.</p>
+        <p><b>New!</b> If your main residence is in Scotland, tick the "Resident in Scotland" box. This will apply the
+            Scottish rates of income tax.</p>
+        <p>If you know your tax code, enter it into the tax code box for a more accurate take-home pay calculation. If
+            you are unsure of your tax code just leave it blank and the default code will be applied.</p>
+        <p>If you have a pension which is deducted automatically, enter the percentage rate at which this is deducted
+            and choose the type of pension into which you are contributing. Pension contributions are estimates, click
+            to
+            <a href="http://blog.thesalarycalculator.co.uk/paye/pensions/pension-contributions-on-the-salary-calculator/"
+               title="Pension deductions on the salary calculator for take home pay">learn more about pension
+                contributions on The Salary calculator</a>.</p>
+        <p>If you receive Childcare vouchers as part of a salary sacrifice scheme, enter the value of the vouchers you
+            receive each month into the field provided. If you signed up for the voucher scheme before 6th April 2011,
+            tick the box - this affects the amount of tax relief you are due.</p>
+        <p>Select your age range from the options displayed. If you are married, tick the "Married" box. Similarly, tick
+            the "Blind" box if you are blind.</p>
+        <p>If you do not pay National Insurance, for example, if you are over State Pension Age, tick the "No NI"
+            box.</p>
+        <p><b>New!</b> There are now three repayment methods for Student Loans, which are known as Plan 1, Plan 2 and
+            Postgraduate Loans. If you are repaying a student loan for a course which started before 1st September 2012,
+            tick "Plan 1", if you are repaying a student loan for a course which started on or after 1st September 2012,
+            tick "Plan 2". If you are repaying a loan for a postgraduate course, tick "Postgraduate".</p>
+        <p>You can now choose the tax year that you wish to calculate. By default, the 2022 / 23 tax year is applied but
+            if you wish to see salary calculations for other years, choose from the drop-down.</p>
+        <p>When you're done, click on the "Calculate!" button, and the table on the right will display the information
+            you requested from the tax calculator. You'll be able to see the gross salary, taxable amount, tax, national
+            insurance and student loan repayments on annual, monthly, weekly and daily bases.</p>
+        <p>This is based on Income Tax, National Insurance and Student Loan information from April 2022. <a
+                href="./about.php" title="About The Salary Calculator">More information on tax rates here</a>.</p>
+    </div>
+</section>
+<div id="footersticky">
+    <script class="__lxGc__" type="text/javascript">
+        ((__lxGc__ = window.__lxGc__ || {
+            's': {},
+            'b': 0
+        })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_660980'] = {'i': __lxGc__.b++};
+    </script>
+    <script class="__lxGc__" type="text/javascript">
+        ((__lxGc__ = window.__lxGc__ || {
+            's': {},
+            'b': 0
+        })['s']['_213476'] = __lxGc__['s']['_213476'] || {'b': {}})['b']['_660986'] = {'i': __lxGc__.b++};
+    </script>
+</div>
+<div id="scotland-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Resident in Scotland</h3>
+        <p>From April 2017 If you live in Scotland, income tax is calculated differently than if you live in the rest of
+            the UK. The rates and thresholds are set by the Scottish Government.</p>
+        <p>You are classed as living in Scotland if that is where your main residence is. More information is available
+            <a href="http://www.gov.scot/Topics/Government/Finance/scottishapproach/Scottishincometax2017-18"
+               target="_blank">here</a> and <a
+                    href="https://www.gov.uk/scottish-rate-income-tax/if-you-live-in-more-than-one-home"
+                    target="_blank">here</a>.</p>
+    </div>
+</div>
+<div id="jobretentionscheme-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Job Support Scheme</h3>
+        <p>The furlough scheme was due to be replaced by the Job Support Scheme in November 2020, but the furlough
+            scheme has been extended and the Job Support Scheme may be introduced later in the year. This scheme offers
+            support to employers who bring their staff back to work gradually.</p>
+        <p>As long as you work 20% or more of your full-time hours, your employer will pay an extra 5% of the remainder
+            of your pay, and the government will pay 61.67% of the remainder as well. The government contribution is
+            capped at £1541.75 per month.</p>
+    </div>
+</div>
+<div id="cappay-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>£2,500 per month limit</h3>
+        <p>During the Coronavirus outbreak, the government have said that they will subsidise employers' costs to pay
+            staff who are not working and are instead placed on "furlough". The government subsidy is limited to 80% of
+            the employee's salary, or £2,500 per month, whichever is the lower. To make sure this cap is applied to your
+            calculations, tick the box.</p>
+    </div>
+</div>
+<div id="holdpension-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Don't reduce pension contributions when on furlough</h3>
+        <p>For some people, although the amount they are getting paid has been reduced, their pension contributions are
+            still calculated on their full salary. If this applies to you, tick this box and the calculator will use
+            your full salary to work out the pension contributions to apply.</p>
+    </div>
+</div>
+<div id="taxcode-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Tax Code</h3>
+        <p>If you know your tax code, enter it here to get a more accurate calculation of the tax you will pay. If you
+            are unsure of your tax code, just leave it blank and the default will be applied.</p>
+        <p>Learn more about tax codes on the page <a href="./about.php">about The Salary Calculator</a>.</p>
+    </div>
+</div>
+<div id="student-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Student Loans</h3>
+        <p>There are several methods for repaying student loans, and more than one may apply to you. If you started your
+            undergraduate course before 1st September 2012, or you lived in Northern Ireland, your loan will be repaid
+            under "Plan 1". If your course started on or after 1st September 2012 and you lived in England or Wales, you
+            will repay your loan through Plan 2. From April 2021, choose Plan 4 if you lived in Scotland (even if you
+            took out your loan before 2021). Loans for postgraduate study are repaid through the Postgraduate Loan plan.
+            Tick the relevant box(es) to see the deductions.</p>
+        <p>More information is available on the <a href="./about.php" target="_blank">About</a> page.</p>
+    </div>
+</div>
+<div id="bonus-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Bonus Payments</h3>
+        <p>If you are being awarded a bonus by your employer, enter the £ value of this bonus and choose your normal pay
+            period. This is treated as a one-off payment in a single pay period.</p>
+        <p>Instead of the usual columns in the results table, you will see your yearly totals and a comparison of your
+            bonus period with a normal period.</p>
+        <p>As most employers do not include bonus payments in the calculation of pension deductions, the calculator also
+            makes no changes to pensions in a bonus period.</p>
+    </div>
+</div>
+<div id="pension-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Pension Contributions</h3>
+        <p>If you contribute to a pension scheme by having a percentage of your salary deducted by your employer, enter
+            the percentage into the "Pension contribution" field.</p>
+        <p>If you do not know the percentage that you contribute, you can instead choose to enter the amount, in pounds
+            and pence, that you contribute from each payslip.</p>
+        <p>Choose the type of pension that you have, either an auto-enrolment employer pension, an other
+            (non-auto-enrolment) employer pension, a salary sacrifice scheme, or a personal pension. For auto-enrolment
+            pensions, the percentage contribution field only applies to your earnings between the lower and upper
+            thresholds (£6,240 to £50,270), not your whole income.</p>
+        <p>If your pension is not auto-enrolment, you can choose whether your contribution is based on your whole gross
+            salary, or your "Qualifying Earnings", which is the amount you earn between the auto-enrolment thresholds
+            described in the previous paragraph. If your overtime payments or bonuses are subject to pension
+            contributions, tick these boxes (these apply automatically to auto-enrolment pensions).</p>
+        <p>If you receive cash allowances, like a car allowance or mobile phone allowance, and this is also included in
+            your pensionable pay, tick the "Include cash allowances" box.</p>
+    </div>
+</div>
+<div id="childcare-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Childcare Vouchers</h3>
+        <p>If you receive childcare vouchers as part of a salary sacrifice scheme, enter the monthly value of the
+            vouchers that you receive into the box provided.</p>
+        <p>If you joined the voucher scheme before 6th April 2011, tick the box.</p>
+    </div>
+</div>
+<div id="sacrifice-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Salary Sacrifice</h3>
+        <p>You might agree with your employer to contractually reduce your salary by a certain amount, in exchange for
+            some non-cash benefits. From April 2017, most schemes will only save National Insurance on the value of
+            those benefits.</p>
+        <p>If your scheme is tax-exempt, then you will also save income tax on the amount you sacrifice.</p>
+        <p>If you take part in such a scheme, enter the amount you sacrifice into the box (choose NI only or tax exempt
+            according to your scheme) and choose whether this is on a yearly, monthly or weekly basis.</p>
+    </div>
+</div>
+<div id="benefits-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Taxable Benefits</h3>
+        <p>Your employer might provide you with employment benefits, such as a company car or private healthcare, known
+            as "benefits in kind". You pay tax on the value of these benefits, but not National Insurance. If your tax
+            code is used to collect the extra tax, you do not need to enter your benefits here.</p>
+        <p>Alternatively, your employer might provide you with a cash allowance (such as a car allowance) which
+            increases your take-home pay. Both income tax and National Insurance are due on such allowances.</p>
+        <p>If you do receive such benefits, enter the value of the benefits into the box and choose whether this is on a
+            yearly, monthly or weekly basis.</p>
+    </div>
+</div>
+<div id="checkbox-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Other Options</h3>
+        <p>You may not pay National Insurance Contributions, for example if you are over State Pension Age. If this
+            applies to you, tick the "No NI" box.</p>
+        <p>Those who are registered blind are entitled to an increased personal allowance which reduces the amount of
+            tax you pay. Tick the "Blind" box if this applies to you.</p>
+        <p>If you are married and were born before 6th April 1938, you receive a tax rebate. Tick the "Married" box to
+            apply this rebate to calculations - otherwise leave the box clear.</p>
+        <p>Just for your information, you can also see the amount of National Insurance your employer is paying - this
+            is not deducted from your salary so does not affect your take-home pay.</p>
+    </div>
+</div>
+<div id="deductions-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Other Deductions</h3>
+        <p>If you have other deductions which are taken out of your pay each month, enter them into the fields provided.
+            Some deductions are made before tax (such as charitable giving or Give As You Earn), others are taken after
+            tax.</p>
+        <p>Deductions before tax should go in the "Pre-tax" box, and those taken after tax should go in the "After tax"
+            box.</p>
+    </div>
+</div>
+<div id="age-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Age</h3>
+        <p>Prior to 2016, your age affected your tax-free personal allowance. Since 2016, all ages have received the
+            same personal allowance, so this option only applies if choosing earlier tax years.</p>
+        <p>Choose your age on 6th April at the start of the tax year you are interested in.</p>
+    </div>
+</div>
+<div id="employersni" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Employer's National Insurance</h3>
+        <p>As well as your own National Insurance contributions, your employer pays National Insurance to HMRC but this
+            is <strong>not</strong> deducted from your take-home pay.</p>
+    </div>
+</div>
+<div id="july2022" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>July 2022 National Insurance change</h3>
+        <p>On 23rd March 2022 Chancellor Rishi Sunak announced an increase in the threshold for payment of Employee's
+            National Insurance from £190 per week to £242 per week, with effect from July 2022. This reduces the amount
+            of NI that employees will pay from that date, but payments made between April and June will have the
+            previous threshold applied.</p>
+    </div>
+</div>
+<div id="days-weeks-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <h3>Days in a week</h3>
+        <p>The default is for 5 days a week, but if you work a different number of days per week, change the value here
+            and the "Daily" results column will reflect the change.</p>
+        <h3>Weeks in a year</h3>
+        <p>For most people, 52 weeks in the year is sufficient, but some employers use the more accurate 52.14. This
+            only affects hourly rate and overtime calculations.</p>
+    </div>
+</div>
+<div id="graph-modal" class="modal-window">
+    <div><a href="#modal-close" title="Close" class="modal-close">Close</a>
+        <div id="chart_div">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function modalClose() {
+        if (location.hash == '#july2022', '#survey', '#breakdown', '#loanbreakdown', '#age-modal', '#graph-modal', '#scotland-modal', '#taxcode-modal', '#student-modal', '#childcare-modal', '#sacrifice-modal', '#benefits-modal', '#pension-modal', '#checkbox-modal', '#deductions-modal', '#days-weeks-modal', '#holdpension-modal', '#cappay-modal', '#graph-modal', '#employersni') {
+            location.hash = '#modal-close';
+        }
+    }
+
+    document.addEventListener('keyup', function (e) {
+        if (e.keyCode == 27) {
+            modalClose();
+        }
+    });
+
+    var modal = document.querySelector('#july2022', '#survey', '#breakdown', '#loanbreakdown', '#age-modal', '#graph-modal', '#scotland-modal', '#taxcode-modal', '#student-modal', '#childcare-modal', '#sacrifice-modal', '#benefits-modal', '#pension-modal', '#checkbox-modal', '#deductions-modal', '#days-weeks-modal', '#holdpension-modal', '#cappay-modal', '#graph-modal', '#employersni');
+    modal.addEventListener('click', function (e) {
+        modalClose();
+    }, false);
+
+    modal.children[0].addEventListener('click', function (e) {
+        e.stopPropagation();
+    }, false);
+</script>
+<section class="main-content">
+    <div class="wrap content footer">
+        <h4>Disclaimer: Information provided on this site is for illustrative purposes only.<br> Do not make any major
+            financial decisions without consulting a qualified specialist.</h4>
+        <p>Copyright © 2005 - 2022 thesalarycalculator.co.uk <a
+                href="mailto:webmaster@thesalarycalculator.co.uk?subject=Salary Calculator">Suggestions?</a></p>
+        <p>Registered in England and Wales no. 8436708 <a href="./terms.php">Terms and Conditions and Privacy Policy</a>
+        </p>
+        <p><a href="http://www.freevirtualservers.com/affiliates/idevaffiliate.php?id=240">Free, cheap web hosting by
+            FreeVirtualServers</a></p>
+        <p><a href="./sitemap.htm">Site Map</a> - <a href="#"
+                                                     onclick="if(window.__lxG__consent__ !== undefined) {window.__lxG__consent__.showConsent()} else {alert('This function only for users from European Economic Area (EEA)')}; return false">Change
+            privacy settings</a></p>
+    </div>
+</section>
+</body>
+</html>
