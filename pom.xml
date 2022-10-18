@@ -31,7 +31,7 @@
         <ktor.version>1.6.1</ktor.version>
         <h2.version>1.4.200</h2.version>
 
-        <jackson.version>2.11.1</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <sparkjava.version>2.7.2</sparkjava.version>
         <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
 
