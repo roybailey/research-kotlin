@@ -134,11 +134,13 @@ class CoroutineBasicTest {
                     }
                 }
             } catch (err: Exception) {
+                println("job: "+err::class.java.name)
                 println("job: "+err.message)
             } finally {
                 println("job: finally block executing")
             }
         }
+        job.join()
         println("main: Now I can quit.")
     }
 }

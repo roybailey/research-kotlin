@@ -13,7 +13,7 @@
         <java.version>11</java.version>
         <kotlin.version>1.4.10</kotlin.version>
         <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
-        <kotlinx.version>1.3.7</kotlinx.version>
+        <kotlinx.version>1.4.2</kotlinx.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 

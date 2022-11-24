@@ -82,8 +82,7 @@ class GuavaCachingTest {
     @Test
     @Throws(InterruptedException::class)
     fun whenEntryIdle_thenEviction() {
-        val loader: CacheLoader<String, String>
-        loader = object : CacheLoader<String, String>() {
+        val loader: CacheLoader<String, String> = object : CacheLoader<String, String>() {
             override fun load(key: String): String? {
                 return key.toUpperCase()
             }

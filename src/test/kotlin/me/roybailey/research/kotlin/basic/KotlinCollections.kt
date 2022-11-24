@@ -2,11 +2,36 @@ package me.roybailey.research.kotlin.basic
 
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.Test
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 
 class KotlinCollections {
 
     @Test
+    fun testKotlinListTransformations() {
+
+        val listWords = listOf<String>(
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+        )
+        val pageSize = 2
+        val listPages = mutableListOf<List<String>>()
+        for (index in listWords.indices step pageSize) {
+            listPages.add(listWords.subList(index, min(listWords.size, index+pageSize)))
+        }
+        println(listPages.reversed().flatten())
+    }
+
+        @Test
     fun testKotlinMapTransformations() {
 
         val testMap = mapOf<String, String>(
