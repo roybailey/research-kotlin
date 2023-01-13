@@ -36,7 +36,7 @@
         <spark-kotlin.version>1.0.0-alpha</spark-kotlin.version>
 
         <neo4j.version>3.4.18</neo4j.version>
-        <neo4j.apoc.version>3.4.0.4</neo4j.apoc.version>
+        <neo4j.apoc.version>4.3.0.12</neo4j.apoc.version>
         <h2.version>1.4.196</h2.version>
 
         <apache-csv.version>1.5</apache-csv.version>
